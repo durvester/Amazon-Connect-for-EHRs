@@ -1,0 +1,41 @@
+[project]
+name = "pf-practice-api"
+version = "0.0.1"
+description = "Practice-facing API backing the dashboard"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "boto3>=1.34",
+    "pydantic>=2.7",
+    "mangum>=0.18",
+    "python-jose[cryptography]>=3.3",
+    "requests>=2.32",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "ruff>=0.5",
+    "uvicorn>=0.30",
+    "moto[dynamodb,kms,secretsmanager]>=5",
+    "responses>=0.25",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "integration: hits real Practice Fusion / AWS endpoints; requires PF_* env vars",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

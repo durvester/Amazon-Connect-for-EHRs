@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 700" font-family="Inter, -apple-system, sans-serif" font-size="12">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#475569"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#16a34a"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="950" height="700" fill="#f8fafc" rx="8"/>
+  <text x="475" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Call State Machine — Every Path a Call Can Take</text>
+
+  <!-- CALL_START -->
+  <circle cx="475" cy="70" r="22" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="475" y="74" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">START</text>
+
+  <!-- ROUTING -->
+  <rect x="405" y="110" width="140" height="40" rx="6" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="475" y="135" text-anchor="middle" font-weight="600" fill="#c2410c">ROUTING</text>
+  <line x1="475" y1="92" x2="475" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Branch: found vs unknown -->
+  <line x1="475" y1="150" x2="475" y2="175" stroke="#475569" stroke-width="1"/>
+  <line x1="475" y1="175" x2="300" y2="175" stroke="#dc2626" stroke-width="1"/>
+  <line x1="475" y1="175" x2="475" y2="200" stroke="#16a34a" stroke-width="1" marker-end="url(#arr-green)"/>
+  <line x1="300" y1="175" x2="300" y2="200" stroke="#dc2626" stroke-width="1" marker-end="url(#arr-red)"/>
+
+  <text x="380" y="170" font-size="10" fill="#dc2626">UNKNOWN</text>
+  <text x="490" y="192" font-size="10" fill="#16a34a">found</text>
+
+  <!-- UNREGISTERED -->
+  <rect x="230" y="200" width="140" height="40" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="300" y="224" text-anchor="middle" font-weight="600" fill="#991b1b">UNREGISTERED</text>
+  <line x1="300" y1="240" x2="300" y2="268" stroke="#dc2626" stroke-width="1" marker-end="url(#arr-red)"/>
+  <rect x="248" y="270" width="104" height="28" rx="12" fill="#fecaca" stroke="#ef4444"/>
+  <text x="300" y="288" text-anchor="middle" font-size="10" fill="#991b1b">DISCONNECT</text>
+
+  <!-- SLOT_COLLECTION -->
+  <rect x="405" y="200" width="140" height="40" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="475" y="217" text-anchor="middle" font-weight="600" fill="#5b21b6">SLOT</text>
+  <text x="475" y="232" text-anchor="middle" font-weight="600" fill="#5b21b6">COLLECTION</text>
+
+  <!-- Branches from slot collection -->
+  <line x1="475" y1="240" x2="475" y2="265" stroke="#475569" stroke-width="1"/>
+  <!-- all slots -->
+  <line x1="475" y1="265" x2="475" y2="300" stroke="#16a34a" stroke-width="1" marker-end="url(#arr-green)"/>
+  <text x="490" y="283" font-size="10" fill="#16a34a">all filled</text>
+  <!-- timeout -->
+  <line x1="475" y1="265" x2="620" y2="265" stroke="#94a3b8" stroke-width="1"/>
+  <line x1="620" y1="265" x2="620" y2="290" stroke="#94a3b8" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="550" y="258" font-size="10" fill="#94a3b8">timeout</text>
+  <!-- fallback -->
+  <line x1="475" y1="265" x2="730" y2="265" stroke="#f59e0b" stroke-width="1"/>
+  <line x1="730" y1="265" x2="730" y2="290" stroke="#f59e0b" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="680" y="258" font-size="10" fill="#f59e0b">fallback</text>
+  <!-- human request -->
+  <line x1="475" y1="265" x2="840" y2="265" stroke="#ec4899" stroke-width="1"/>
+  <line x1="840" y1="265" x2="840" y2="290" stroke="#ec4899" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="790" y="258" font-size="10" fill="#ec4899">"talk to human"</text>
+
+  <!-- TIMEOUT box -->
+  <rect x="570" y="290" width="100" height="35" rx="12" fill="#fecaca" stroke="#ef4444"/>
+  <text x="620" y="312" text-anchor="middle" font-size="10" fill="#991b1b">TIMEOUT</text>
+  <!-- FALLBACK box -->
+  <rect x="680" y="290" width="100" height="35" rx="12" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="730" y="312" text-anchor="middle" font-size="10" fill="#92400e">FALLBACK</text>
+  <!-- HUMAN_REQ box -->
+  <rect x="790" y="290" width="100" height="35" rx="12" fill="#fce7f3" stroke="#ec4899"/>
+  <text x="840" y="312" text-anchor="middle" font-size="10" fill="#9d174d">HUMAN_REQ</text>
+
+  <!-- All three → ESCALATE -->
+  <line x1="620" y1="325" x2="620" y2="380" stroke="#dc2626" stroke-width="1"/>
+  <line x1="730" y1="325" x2="730" y2="370" stroke="#dc2626" stroke-width="1"/>
+  <line x1="730" y1="370" x2="620" y2="380" stroke="#dc2626" stroke-width="1"/>
+  <line x1="840" y1="325" x2="840" y2="360" stroke="#dc2626" stroke-width="1"/>
+  <line x1="840" y1="360" x2="620" y2="380" stroke="#dc2626" stroke-width="1"/>
+
+  <!-- VERIFY -->
+  <rect x="405" y="300" width="140" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="475" y="317" text-anchor="middle" font-weight="600" fill="#92400e">VERIFY</text>
+  <text x="475" y="332" text-anchor="middle" font-size="10" fill="#a16207">lookup_patient</text>
+
+  <!-- Branches from VERIFY -->
+  <line x1="475" y1="340" x2="475" y2="365" stroke="#475569" stroke-width="1"/>
+
+  <!-- single_match → VERIFIED -->
+  <line x1="475" y1="365" x2="200" y2="365" stroke="#16a34a" stroke-width="1.5"/>
+  <line x1="200" y1="365" x2="200" y2="400" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <text x="340" y="358" font-size="10" font-weight="600" fill="#16a34a">single_match</text>
+
+  <!-- multiple → DISAMBIGUATE -->
+  <line x1="475" y1="365" x2="360" y2="365" stroke="#f59e0b" stroke-width="1"/>
+  <line x1="360" y1="365" x2="360" y2="400" stroke="#f59e0b" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="420" y="380" font-size="10" fill="#f59e0b">multiple</text>
+
+  <!-- no_match, rate_limited, error, cred_expired → ESCALATE -->
+  <line x1="475" y1="365" x2="620" y2="380" stroke="#dc2626" stroke-width="1" marker-end="url(#arr-red)"/>
+  <text x="555" y="376" font-size="9" fill="#dc2626">no_match / rate_limited /</text>
+  <text x="555" y="387" font-size="9" fill="#dc2626">error / cred_expired</text>
+
+  <!-- VERIFIED -->
+  <rect x="130" y="400" width="140" height="40" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="200" y="425" text-anchor="middle" font-weight="700" fill="#166534">VERIFIED ✓</text>
+
+  <!-- DISAMBIGUATE -->
+  <rect x="290" y="400" width="140" height="40" rx="6" fill="#fef9c3" stroke="#eab308" stroke-width="1.5"/>
+  <text x="360" y="425" text-anchor="middle" font-weight="600" fill="#854d0e">DISAMBIGUATE</text>
+
+  <!-- Disambiguate → Verified or Escalate -->
+  <line x1="360" y1="440" x2="360" y2="465" stroke="#475569" stroke-width="1"/>
+  <line x1="360" y1="465" x2="200" y2="465" stroke="#16a34a" stroke-width="1"/>
+  <line x1="200" y1="440" x2="200" y2="465" stroke="#16a34a" stroke-width="1"/>
+  <text x="280" y="458" font-size="10" fill="#16a34a">matched</text>
+  <line x1="360" y1="465" x2="620" y2="465" stroke="#dc2626" stroke-width="1"/>
+  <line x1="620" y1="420" x2="620" y2="465" stroke="#dc2626" stroke-width="1"/>
+  <text x="490" y="458" font-size="10" fill="#dc2626">still ambiguous</text>
+
+  <!-- ESCALATE -->
+  <rect x="560" y="395" width="120" height="40" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+  <text x="620" y="420" text-anchor="middle" font-weight="700" fill="#991b1b">ESCALATE</text>
+
+  <!-- From VERIFIED -->
+  <line x1="200" y1="440" x2="200" y2="500" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arr-green)"/>
+
+  <!-- JTBD box -->
+  <rect x="110" y="500" width="180" height="60" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="200" y="520" text-anchor="middle" font-weight="600" fill="#1e40af">JTBD Resolution</text>
+  <text x="200" y="536" text-anchor="middle" font-size="10" fill="#3b82f6">lab_result_status</text>
+  <text x="200" y="549" text-anchor="middle" font-size="10" fill="#3b82f6">visit_summary · document_status</text>
+
+  <!-- From JTBD → resolved or transfer -->
+  <line x1="200" y1="560" x2="200" y2="585" stroke="#475569" stroke-width="1"/>
+  <line x1="200" y1="585" x2="120" y2="585" stroke="#16a34a" stroke-width="1"/>
+  <line x1="120" y1="585" x2="120" y2="610" stroke="#16a34a" stroke-width="1" marker-end="url(#arr-green)"/>
+  <text x="155" y="578" font-size="10" fill="#16a34a">resolved</text>
+
+  <line x1="200" y1="585" x2="280" y2="585" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="280" y1="585" x2="280" y2="610" stroke="#3b82f6" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="245" y="578" font-size="10" fill="#3b82f6">needs human</text>
+
+  <!-- RESOLVED -->
+  <rect x="60" y="610" width="120" height="40" rx="12" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
+  <text x="120" y="635" text-anchor="middle" font-weight="700" fill="#166534">RESOLVED</text>
+  <line x1="120" y1="650" x2="120" y2="670" stroke="#16a34a" stroke-width="1" marker-end="url(#arr-green)"/>
+  <text x="120" y="685" text-anchor="middle" font-size="10" fill="#166534">Caller hangs up satisfied</text>
+
+  <!-- TRANSFER_VERIFIED -->
+  <rect x="220" y="610" width="140" height="40" rx="12" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="290" y="628" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">TRANSFER</text>
+  <text x="290" y="643" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">(verified)</text>
+  <line x1="290" y1="650" x2="290" y2="670" stroke="#3b82f6" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="290" y="685" text-anchor="middle" font-size="10" fill="#1e40af">Human gets verified context</text>
+
+  <!-- ESCALATE outcomes -->
+  <line x1="620" y1="435" x2="620" y2="610" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <rect x="555" y="610" width="130" height="40" rx="12" fill="#fecaca" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="620" y="628" text-anchor="middle" font-size="10" font-weight="600" fill="#991b1b">TRANSFER</text>
+  <text x="620" y="643" text-anchor="middle" font-size="10" font-weight="600" fill="#991b1b">(unverified)</text>
+  <line x1="620" y1="650" x2="620" y2="670" stroke="#dc2626" stroke-width="1" marker-end="url(#arr-red)"/>
+  <text x="620" y="685" text-anchor="middle" font-size="10" fill="#991b1b">Human must re-verify</text>
+
+  <!-- Legend -->
+  <rect x="740" y="420" width="190" height="100" rx="6" fill="#fff" stroke="#e2e8f0"/>
+  <text x="755" y="440" font-size="11" font-weight="600" fill="#0f172a">Legend</text>
+  <line x1="755" y1="455" x2="785" y2="455" stroke="#16a34a" stroke-width="2"/>
+  <text x="795" y="459" font-size="10" fill="#475569">Happy path</text>
+  <line x1="755" y1="475" x2="785" y2="475" stroke="#dc2626" stroke-width="2"/>
+  <text x="795" y="479" font-size="10" fill="#475569">Error / escalation</text>
+  <line x1="755" y1="495" x2="785" y2="495" stroke="#f59e0b" stroke-width="2"/>
+  <text x="795" y="499" font-size="10" fill="#475569">Disambiguation</text>
+  <line x1="755" y1="515" x2="785" y2="515" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="795" y="519" font-size="10" fill="#475569">Timeout / abort</text>
+</svg>

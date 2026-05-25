@@ -1,0 +1,324 @@
+{
+  "DiagnosticReport(_count=5)": {
+    "resourceType": "Bundle",
+    "id": "urn:uuid:94049713-6cf9-4b6b-8fa3-e991b68331f8",
+    "type": "searchset",
+    "updated": "2026-05-25T00:51:22.097Z",
+    "total": 0,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/DiagnosticReport?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search"
+      },
+      {
+        "relation": "first",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/DiagnosticReport?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search&page=1"
+      },
+      {
+        "relation": "last",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/DiagnosticReport?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search&page=1"
+      }
+    ],
+    "entry": []
+  },
+  "MedicationRequest(_count=5)": {
+    "resourceType": "Bundle",
+    "id": "urn:uuid:903aad7c-d60c-40b3-be12-2ef28b25de1f",
+    "type": "searchset",
+    "updated": "2026-05-25T00:51:22.576Z",
+    "total": 0,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/MedicationRequest?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search"
+      },
+      {
+        "relation": "first",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/MedicationRequest?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search&page=1"
+      },
+      {
+        "relation": "last",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/MedicationRequest?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search&page=1"
+      }
+    ],
+    "entry": []
+  },
+  "Encounter(_count=5,_sort=-date)": {
+    "resourceType": "Bundle",
+    "id": "urn:uuid:05a8c19a-2811-432d-ae87-d7fc9f170ba0",
+    "type": "searchset",
+    "updated": "2026-05-25T00:51:23.148Z",
+    "total": 6,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&_sort=-date&operation=search"
+      },
+      {
+        "relation": "first",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&_sort=-date&operation=search&page=1"
+      },
+      {
+        "relation": "next",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&_sort=-date&operation=search&page=2"
+      },
+      {
+        "relation": "last",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&_sort=-date&operation=search&page=2"
+      }
+    ],
+    "entry": [
+      {
+        "resource": {
+          "account": [
+            {
+              "reference": "Account/f091f9ff-a055-41b3-898a-9f55bab937c8"
+            }
+          ],
+          "class": {
+            "code": "unknown",
+            "display": "unknown"
+          },
+          "resourceType": "Encounter",
+          "serviceProvider": {
+            "reference": "Organization/b4ab304f-d1ac-4565-8dca-992b589422a7",
+            "display": "Practice Fusion Partner Sandbox"
+          },
+          "status": "in-progress",
+          "subject": {
+            "reference": "Patient/b79082d9-548c-454e-9fc7-ce19ab630776",
+            "display": "Durve, Mohit Milind"
+          },
+          "type": [
+            {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+                  "code": "unknown",
+                  "display": "Unknown"
+                }
+              ],
+              "text": "Unknown"
+            }
+          ],
+          "meta": {
+            "lastUpdated": "2026-01-30T04:13:22.721Z"
+          },
+          "id": "348e9142-8b01-4d02-a5a1-9ce0dad9d425"
+        },
+        "fullUrl": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter/348e9142-8b01-4d02-a5a1-9ce0dad9d425"
+      },
+      {
+        "resource": {
+          "class": {
+            "code": "unknown",
+            "display": "unknown"
+          },
+          "resourceType": "Encounter",
+          "serviceProvider": {
+            "reference": "Organization/b4ab304f-d1ac-4565-8dca-992b589422a7",
+            "display": "Practice Fusion Partner Sandbox"
+          },
+          "status": "in-progress",
+          "subject": {
+            "reference": "Patient/b79082d9-548c-454e-9fc7-ce19ab630776",
+            "display": "Durve, Mohit Milind"
+          },
+          "type": [
+            {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+                  "code": "unknown",
+                  "display": "Unknown"
+                }
+              ],
+              "text": "Unknown"
+            }
+          ],
+          "meta": {
+            "lastUpdated": "2026-01-30T04:12:53.883Z"
+          },
+          "id": "475676c5-7d18-4ce3-94f8-7845f43ce2db"
+        },
+        "fullUrl": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter/475676c5-7d18-4ce3-94f8-7845f43ce2db"
+      },
+      {
+        "resource": {
+          "class": {
+            "code": "unknown",
+            "display": "unknown"
+          },
+          "resourceType": "Encounter",
+          "serviceProvider": {
+            "reference": "Organization/b4ab304f-d1ac-4565-8dca-992b589422a7",
+            "display": "Practice Fusion Partner Sandbox"
+          },
+          "status": "in-progress",
+          "subject": {
+            "reference": "Patient/b79082d9-548c-454e-9fc7-ce19ab630776",
+            "display": "Durve, Mohit Milind"
+          },
+          "type": [
+            {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+                  "code": "unknown",
+                  "display": "Unknown"
+                }
+              ],
+              "text": "Unknown"
+            }
+          ],
+          "meta": {
+            "lastUpdated": "2026-05-23T21:38:49.315Z"
+          },
+          "id": "65404241-7176-45f5-b2b5-1a63ab35b2e2"
+        },
+        "fullUrl": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter/65404241-7176-45f5-b2b5-1a63ab35b2e2"
+      },
+      {
+        "resource": {
+          "class": {
+            "code": "unknown",
+            "display": "unknown"
+          },
+          "resourceType": "Encounter",
+          "serviceProvider": {
+            "reference": "Organization/b4ab304f-d1ac-4565-8dca-992b589422a7",
+            "display": "Practice Fusion Partner Sandbox"
+          },
+          "status": "in-progress",
+          "subject": {
+            "reference": "Patient/b79082d9-548c-454e-9fc7-ce19ab630776",
+            "display": "Durve, Mohit Milind"
+          },
+          "type": [
+            {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+                  "code": "unknown",
+                  "display": "Unknown"
+                }
+              ],
+              "text": "Unknown"
+            }
+          ],
+          "meta": {
+            "lastUpdated": "2026-05-23T21:38:27.277Z"
+          },
+          "id": "d7ad0c46-e5c8-40b9-8e18-8b5b8c13ccd5"
+        },
+        "fullUrl": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter/d7ad0c46-e5c8-40b9-8e18-8b5b8c13ccd5"
+      },
+      {
+        "resource": {
+          "account": [
+            {
+              "reference": "Account/37e0f351-8255-4543-b6fc-17fda04546b7"
+            }
+          ],
+          "class": {
+            "code": "unknown",
+            "display": "unknown"
+          },
+          "resourceType": "Encounter",
+          "serviceProvider": {
+            "reference": "Organization/b4ab304f-d1ac-4565-8dca-992b589422a7",
+            "display": "Practice Fusion Partner Sandbox"
+          },
+          "status": "in-progress",
+          "subject": {
+            "reference": "Patient/b79082d9-548c-454e-9fc7-ce19ab630776",
+            "display": "Durve, Mohit Milind"
+          },
+          "type": [
+            {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+                  "code": "unknown",
+                  "display": "Unknown"
+                }
+              ],
+              "text": "Unknown"
+            }
+          ],
+          "meta": {
+            "lastUpdated": "2026-01-30T04:13:09.273Z"
+          },
+          "id": "c8979873-17c7-4981-b20f-d4d6a0cf0880"
+        },
+        "fullUrl": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Encounter/c8979873-17c7-4981-b20f-d4d6a0cf0880"
+      }
+    ]
+  },
+  "DocumentReference(_count=5)": {
+    "resourceType": "Bundle",
+    "id": "urn:uuid:1d2ce42b-1e31-4a7a-8ce2-17933143bbe2",
+    "type": "searchset",
+    "updated": "2026-05-25T00:51:23.619Z",
+    "total": 0,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/DocumentReference?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search"
+      },
+      {
+        "relation": "first",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/DocumentReference?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search&page=1"
+      },
+      {
+        "relation": "last",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/DocumentReference?patient=b79082d9-548c-454e-9fc7-ce19ab630776&_count=5&operation=search&page=1"
+      }
+    ],
+    "entry": []
+  },
+  "Observation(category=laboratory,_count=5)": {
+    "resourceType": "Bundle",
+    "id": "urn:uuid:44531bdb-03ac-4560-a12e-c89566c3013c",
+    "type": "searchset",
+    "updated": "2026-05-25T00:51:24.129Z",
+    "total": 0,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Observation?patient=b79082d9-548c-454e-9fc7-ce19ab630776&category=laboratory&_count=5&operation=search"
+      },
+      {
+        "relation": "first",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Observation?patient=b79082d9-548c-454e-9fc7-ce19ab630776&category=laboratory&_count=5&operation=search&page=1"
+      },
+      {
+        "relation": "last",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Observation?patient=b79082d9-548c-454e-9fc7-ce19ab630776&category=laboratory&_count=5&operation=search&page=1"
+      }
+    ],
+    "entry": []
+  },
+  "Observation(category=vital-signs,_count=3)": {
+    "resourceType": "Bundle",
+    "id": "urn:uuid:d7f0fffc-9519-479a-97e9-3e30776592d8",
+    "type": "searchset",
+    "updated": "2026-05-25T00:51:24.575Z",
+    "total": 0,
+    "link": [
+      {
+        "relation": "self",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Observation?patient=b79082d9-548c-454e-9fc7-ce19ab630776&category=vital-signs&_count=3&operation=search"
+      },
+      {
+        "relation": "first",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Observation?patient=b79082d9-548c-454e-9fc7-ce19ab630776&category=vital-signs&_count=3&operation=search&page=1"
+      },
+      {
+        "relation": "last",
+        "url": "https://qa-api.practicefusion.com/fhir/r4/v1/b4ab304f-d1ac-4565-8dca-992b589422a7/Observation?patient=b79082d9-548c-454e-9fc7-ce19ab630776&category=vital-signs&_count=3&operation=search&page=1"
+      }
+    ],
+    "entry": []
+  }
+}

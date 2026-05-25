@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Node
+node_modules/
+.pnp.*
+*.tsbuildinfo
+.vite/
+coverage/
+
+# CDK
+cdk.out/
+cdk.context.json
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+# Sealed-box ciphertext + public key ARE meant to be committed — only the
+# private key (in env var PF_DEV_FIXTURE_PRIVKEY / Actions secret) can
+# decrypt. See scripts/seed-dev-refresh-token.py.
+!secrets/pf-qa-refresh-token.enc
+!secrets/dev-fixture-pubkey.b64
+
+# AWS / sessions
+.aws-sam/
+*.zip
+
+# Local notes
+TODO.local.md
+scratch/

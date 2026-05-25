@@ -1,0 +1,72 @@
+[
+  {
+    "name": "lookup_patient",
+    "description": "Search the practice's Practice Fusion FHIR endpoint for Patient resources matching caller-provided identity inputs (name, date of birth, phone). Returns a candidate list; the agent reasons over the candidates to decide match/no-match/ambiguous (see ADR-0013). The Lambda enforces per-(practice, ANI) rate-limit and writes one audit-disclosure record per FHIR probe (see ADR-0009).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "practice_id": {
+          "type": "string",
+          "description": "Tenant identifier resolved from the dialed DID by the contact flow (ADR-0014). REQUIRED. The Lambda uses this to look up per-practice FHIR base URL and OAuth tokens."
+        },
+        "call_id": {
+          "type": "string",
+          "description": "Amazon Connect contact id for the current call. REQUIRED. Used as the audit-record correlation key."
+        },
+        "caller_phone": {
+          "type": "string",
+          "description": "Caller ANI in E.164 (e.g. '+15551234567'). REQUIRED. Used for rate-limit keying and as a FHIR telecom search probe."
+        },
+        "name_first": {
+          "type": "string",
+          "description": "Caller-provided given name. Optional but recommended; the agent should collect it during verification."
+        },
+        "name_last": {
+          "type": "string",
+          "description": "Caller-provided family name. Optional but recommended."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "description": "Caller-provided date of birth in YYYY-MM-DD. Optional but recommended; the agent should collect it during verification."
+        }
+      },
+      "required": ["practice_id", "call_id", "caller_phone"]
+    },
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "One of: 'candidates' (one or more matches; review the list), 'rate_limited' (per-(practice,ANI) budget exceeded — do not retry within the window), 'credentials_expired' (practice's PF refresh token is invalid; ask the caller to call back later), 'error' (transient failure; the agent may retry once)."
+        },
+        "candidates": {
+          "type": "array",
+          "description": "List of candidate Patient records that matched any FHIR probe. May be empty. Each candidate carries enough fields for the agent to disambiguate; see ADR-0013 for the reasoning policy.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "patient_id": { "type": "string" },
+              "name_first": { "type": "string" },
+              "name_last": { "type": "string" },
+              "date_of_birth": { "type": "string" },
+              "phone_masked": {
+                "type": "string",
+                "description": "Last four digits only; never disclose the full phone aloud."
+              },
+              "probe_origin": {
+                "type": "string",
+                "description": "Which FHIR probe surfaced this candidate (e.g., 'telecom', 'family+given'). For agent context only."
+              }
+            }
+          }
+        },
+        "probes_tried": {
+          "type": "array",
+          "description": "FHIR probe templates exercised (audit + debug). Never includes raw PHI values.",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["status"]
+    }
+  }
+]

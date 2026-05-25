@@ -1,0 +1,25 @@
+{
+  "resourceType": "Bundle",
+  "type": "searchset",
+  "total": 2,
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient-a",
+        "name": [{"family": "Smith", "given": ["John"]}],
+        "telecom": [{"system": "phone", "value": "(716) 361-9276"}],
+        "birthDate": "1991-06-09"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient-b",
+        "name": [{"family": "Smith", "given": ["Jane"]}],
+        "telecom": [{"system": "phone", "value": "(716) 361-9276"}],
+        "birthDate": "1991-06-09"
+      }
+    }
+  ]
+}

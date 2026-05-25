@@ -1,0 +1,36 @@
+[project]
+name = "tool-lookup-patient"
+version = "0.0.1"
+description = "Lambda tool: search Practice Fusion FHIR for a patient by phone + DOB"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.34",
+    "requests>=2.32",
+    "pydantic>=2.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "responses>=0.25",
+    "ruff>=0.5",
+    "moto[s3,dynamodb,kms,secretsmanager]>=5",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "integration: hits real Practice Fusion endpoint; requires PF_* env vars",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

@@ -1,0 +1,39 @@
+[project]
+name = "pf-oauth-service"
+version = "0.0.1"
+description = "SMART-on-FHIR OAuth onboarding service for Practice Fusion"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "boto3>=1.34",
+    "requests>=2.32",
+    "pydantic>=2.7",
+    "mangum>=0.18",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "responses>=0.25",
+    "ruff>=0.5",
+    "moto[dynamodb,kms]>=5",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "integration: hits real Practice Fusion endpoint; requires PF_* env vars",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

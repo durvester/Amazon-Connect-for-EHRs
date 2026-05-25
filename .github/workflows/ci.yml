@@ -1,0 +1,57 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            infra/package-lock.json
+      - run: make bootstrap
+      - run: make lint
+
+  test-ci:
+    # Single green-bar gate (Principle #2). Drives `make test-ci`, which runs
+    # the four-layer harness: unit, svc-integration, ui-e2e, agent-e2e.
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      # Sealed-box private key for decrypting secrets/pf-qa-refresh-token.enc.
+      # Without it, the svc-integration layer skips (with a printed warning);
+      # the other three layers still run.
+      PF_DEV_FIXTURE_PRIVKEY: ${{ secrets.PF_DEV_FIXTURE_PRIVKEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            infra/package-lock.json
+      - run: make bootstrap
+      - name: Install Playwright + Chromium
+        run: cd web && npx playwright install --with-deps chromium
+      - run: make test-ci

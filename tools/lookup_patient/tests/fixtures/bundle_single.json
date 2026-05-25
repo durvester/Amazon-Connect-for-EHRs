@@ -1,0 +1,16 @@
+{
+  "resourceType": "Bundle",
+  "type": "searchset",
+  "total": 1,
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "b79082d9-548c-454e-9fc7-ce19ab630776",
+        "name": [{"family": "Durve", "given": ["Mohit", "Milind"]}],
+        "telecom": [{"system": "phone", "use": "mobile", "value": "(716) 361-9276"}],
+        "birthDate": "1991-06-09"
+      }
+    }
+  ]
+}
