@@ -14,6 +14,8 @@ from __future__ import annotations
 import json
 import logging
 import os
+import time
+from datetime import datetime, timezone
 from typing import Any
 
 import boto3
@@ -27,6 +29,7 @@ _MAX_HISTORY_BYTES = 8000
 _DEFAULT_MODEL_ID = "us.anthropic.claude-sonnet-4-6"
 
 _bedrock = None
+_ddb = None
 _system_prompt_text: str | None = None
 
 
@@ -35,6 +38,41 @@ def _get_bedrock():
     if _bedrock is None:
         _bedrock = boto3.client("bedrock-runtime")
     return _bedrock
+
+
+def _get_ddb():
+    global _ddb
+    if _ddb is None:
+        _ddb = boto3.client("dynamodb")
+    return _ddb
+
+
+def _write_call_record(record: dict) -> None:
+    table_name = os.environ.get("CALLS_TABLE_NAME")
+    if not table_name:
+        logger.debug("CALLS_TABLE_NAME not set, skipping call record write")
+        return
+    ttl = int(time.time()) + 90 * 86400  # 90 days
+    caller_phone = record.get("caller_phone", "")
+    masked = f"***{caller_phone[-4:]}" if len(caller_phone) >= 4 else "***"
+    started_at = record.get("started_at") or datetime.now(timezone.utc).isoformat()
+    item = {
+        "practice_id": {"S": record["practice_id"]},
+        "call_id": {"S": record["call_id"]},
+        "started_at": {"S": started_at},
+        "caller_phone_masked": {"S": masked},
+        "outcome": {"S": record.get("outcome", "unknown")},
+        "conversation_phase": {"S": record.get("conversation_phase", "verification")},
+        "turn_count": {"N": str(record.get("turn_count", 0))},
+        "ttl": {"N": str(ttl)},
+    }
+    if record.get("escalation_reason"):
+        item["escalation_reason"] = {"S": record["escalation_reason"]}
+    try:
+        _get_ddb().put_item(TableName=table_name, Item=item)
+        logger.info("call record written: call_id=%s outcome=%s", record["call_id"], record["outcome"])
+    except Exception:
+        logger.exception("failed to write call record")
 
 
 def _load_system_prompt() -> str:
@@ -126,7 +164,7 @@ _TOOL_DEFINITIONS = [
             "properties": {
                 "reason": {
                     "type": "string",
-                    "description": "One of: rate_limited, credentials_expired, lookup_error, no_match, ambiguous, phone_mismatch, caller_request",
+                    "description": "One of: emergency, language_barrier, guardian_unverified, rate_limited, credentials_expired, lookup_error, no_match, ambiguous, phone_mismatch, caller_request",
                 },
             },
             "required": ["reason"],
@@ -378,6 +416,15 @@ def handler(event: dict, context: object) -> dict:
             logger.warning("failed to parse conversation_history, starting fresh")
 
     if len(conversation_history) >= MAX_TURNS * 2:
+        _write_call_record({
+            "practice_id": session_attrs.get("pf_org_uuid", ""),
+            "call_id": session_attrs.get("call_id", ""),
+            "started_at": session_attrs.get("call_started_at", ""),
+            "caller_phone": session_attrs.get("caller_phone", ""),
+            "outcome": "max_turns",
+            "conversation_phase": session_attrs.get("conversation_phase", "verification"),
+            "turn_count": len(conversation_history) // 2,
+        })
         return _close(
             session_attrs,
             "Failed",
@@ -403,6 +450,12 @@ def handler(event: dict, context: object) -> dict:
     if raw_probe:
         phone_probe_ctx = f"- phone_probe_result: {raw_probe}\n"
 
+    hours_status = session_attrs.get("business_hours_status", "open")
+    hours_display = session_attrs.get("business_hours_display", "")
+    hours_ctx = f"- business_hours_status: {hours_status}\n"
+    if hours_display:
+        hours_ctx += f"- business_hours_display: {hours_display}\n"
+
     context_block = (
         "\n\n## Session Context (injected by system — not caller-provided)\n"
         f"- pf_org_uuid: {session_attrs.get('pf_org_uuid', 'UNKNOWN')}\n"
@@ -410,6 +463,7 @@ def handler(event: dict, context: object) -> dict:
         f"- caller_phone: {session_attrs.get('caller_phone', 'UNKNOWN')}\n"
         f"- conversation_phase: {session_attrs.get('conversation_phase', 'verification')}\n"
         f"- verified_patient_id: {session_attrs.get('verified_patient_id', 'NONE')}\n"
+        f"{hours_ctx}"
         f"{phone_probe_ctx}"
     )
     system_prompt = base_prompt + context_block
@@ -439,6 +493,7 @@ def handler(event: dict, context: object) -> dict:
         if tool_name == "escalate_to_human":
             escalating = True
             session_attrs["conversation_state"] = "escalating"
+            session_attrs["escalation_reason"] = tool_input.get("reason", "unknown")
 
         tool_result = _execute_tool(tool_name, tool_input, session_attrs)
 
@@ -472,9 +527,28 @@ def handler(event: dict, context: object) -> dict:
     should_close = escalating or _should_close(claude_response, session_attrs)
 
     if should_close:
+        _write_call_record({
+            "practice_id": session_attrs.get("pf_org_uuid", ""),
+            "call_id": session_attrs.get("call_id", ""),
+            "started_at": session_attrs.get("call_started_at", ""),
+            "caller_phone": session_attrs.get("caller_phone", ""),
+            "outcome": "escalated",
+            "conversation_phase": session_attrs.get("conversation_phase", "verification"),
+            "turn_count": len([m for m in messages if m.get("role") == "user"]),
+            "escalation_reason": session_attrs.get("escalation_reason", ""),
+        })
         return _close(session_attrs, "Failed", final_text)
 
     if _is_goodbye(final_text, session_attrs):
+        _write_call_record({
+            "practice_id": session_attrs.get("pf_org_uuid", ""),
+            "call_id": session_attrs.get("call_id", ""),
+            "started_at": session_attrs.get("call_started_at", ""),
+            "caller_phone": session_attrs.get("caller_phone", ""),
+            "outcome": "fulfilled",
+            "conversation_phase": session_attrs.get("conversation_phase", "verification"),
+            "turn_count": len([m for m in messages if m.get("role") == "user"]),
+        })
         return _close(session_attrs, "Fulfilled", final_text)
 
     return _elicit_intent(session_attrs, final_text)

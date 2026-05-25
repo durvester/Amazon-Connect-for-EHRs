@@ -551,6 +551,201 @@ class TestCloseFulfilled:
         assert result["sessionState"]["intent"]["state"] == "Fulfilled"
 
 
+class TestPromptHardening:
+    """Phase 1: safety hardening (emergency, after-hours, non-English, sensitive dx, minors)."""
+
+    def test_prompt_contains_emergency_detection(self):
+        from lex_code_hook.handler import _load_system_prompt
+        prompt = _load_system_prompt()
+        assert "911" in prompt
+        assert "emergency" in prompt.lower()
+        assert "chest pain" in prompt.lower()
+
+    def test_prompt_contains_after_hours_handling(self):
+        from lex_code_hook.handler import _load_system_prompt
+        prompt = _load_system_prompt()
+        assert "business_hours_status" in prompt
+        assert "closed" in prompt.lower()
+
+    def test_prompt_contains_non_english_handling(self):
+        from lex_code_hook.handler import _load_system_prompt
+        prompt = _load_system_prompt()
+        assert "language_barrier" in prompt
+
+    def test_prompt_contains_sensitive_diagnosis_gating(self):
+        from lex_code_hook.handler import _load_system_prompt
+        prompt = _load_system_prompt()
+        assert "HIV" in prompt or "psychiatric" in prompt.lower()
+        assert "patient portal" in prompt.lower()
+
+    def test_prompt_contains_minor_guardian_handling(self):
+        from lex_code_hook.handler import _load_system_prompt
+        prompt = _load_system_prompt()
+        assert "guardian" in prompt.lower()
+
+    def test_escalation_reasons_include_emergency(self):
+        from lex_code_hook.handler import _TOOL_DEFINITIONS
+        escalate_def = next(t for t in _TOOL_DEFINITIONS if t["name"] == "escalate_to_human")
+        reason_desc = escalate_def["input_schema"]["properties"]["reason"]["description"]
+        assert "emergency" in reason_desc
+
+    def test_escalation_reasons_include_language_barrier(self):
+        from lex_code_hook.handler import _TOOL_DEFINITIONS
+        escalate_def = next(t for t in _TOOL_DEFINITIONS if t["name"] == "escalate_to_human")
+        reason_desc = escalate_def["input_schema"]["properties"]["reason"]["description"]
+        assert "language_barrier" in reason_desc
+
+    @patch("lex_code_hook.handler._get_bedrock")
+    def test_after_hours_closed_injects_status_into_prompt(self, mock_get_bedrock):
+        from lex_code_hook.handler import handler
+
+        mock_client = MagicMock()
+        mock_get_bedrock.return_value = mock_client
+        mock_client.invoke_model.return_value = _mock_bedrock_text_response(
+            "Our office is currently closed."
+        )
+
+        event = _make_lex_event(
+            input_transcript="hello",
+            session_attributes={
+                "pf_org_uuid": "test-uuid",
+                "caller_phone": "+17163619276",
+                "call_id": "contact-abc",
+                "business_hours_status": "closed",
+                "business_hours_display": "Mon-Fri 8am-5pm",
+            },
+        )
+        result = handler(event, {})
+
+        call_body = json.loads(mock_client.invoke_model.call_args[1]["body"])
+        system_text = " ".join(msg.get("text", "") for msg in call_body["system"] if isinstance(msg, dict))
+        assert "business_hours_status: closed" in system_text
+        assert "Mon-Fri 8am-5pm" in system_text
+
+    @patch("lex_code_hook.handler._get_bedrock")
+    def test_no_business_hours_defaults_to_open(self, mock_get_bedrock):
+        from lex_code_hook.handler import handler
+
+        mock_client = MagicMock()
+        mock_get_bedrock.return_value = mock_client
+        mock_client.invoke_model.return_value = _mock_bedrock_text_response("Hi!")
+
+        event = _make_lex_event(
+            input_transcript="hello",
+            session_attributes={
+                "pf_org_uuid": "test-uuid",
+                "caller_phone": "+1",
+                "call_id": "c",
+            },
+        )
+        result = handler(event, {})
+
+        call_body = json.loads(mock_client.invoke_model.call_args[1]["body"])
+        system_text = " ".join(msg.get("text", "") for msg in call_body["system"] if isinstance(msg, dict))
+        assert "business_hours_status: open" in system_text
+
+
+class TestCallRecord:
+    """Phase 2: call record written to DDB on Close."""
+
+    @patch("lex_code_hook.handler._write_call_record")
+    @patch("lex_code_hook.handler._get_bedrock")
+    def test_close_fulfilled_writes_call_record(self, mock_get_bedrock, mock_write):
+        from lex_code_hook.handler import handler
+
+        mock_client = MagicMock()
+        mock_get_bedrock.return_value = mock_client
+        mock_client.invoke_model.return_value = _mock_bedrock_text_response(
+            "Thank you for calling. Goodbye."
+        )
+
+        event = _make_lex_event(
+            input_transcript="no that's all thank you",
+            session_attributes={
+                "pf_org_uuid": "test-uuid",
+                "caller_phone": "+17163619276",
+                "call_id": "contact-abc",
+                "conversation_phase": "service",
+                "verified_patient_id": "pat-1",
+            },
+        )
+        handler(event, {})
+        mock_write.assert_called_once()
+        call_args = mock_write.call_args[0][0]
+        assert call_args["practice_id"] == "test-uuid"
+        assert call_args["call_id"] == "contact-abc"
+        assert call_args["outcome"] == "fulfilled"
+
+    @patch("lex_code_hook.handler._write_call_record")
+    @patch("lex_code_hook.handler._get_bedrock")
+    def test_close_escalation_writes_call_record(self, mock_get_bedrock, mock_write):
+        from lex_code_hook.handler import handler
+
+        mock_client = MagicMock()
+        mock_get_bedrock.return_value = mock_client
+        mock_client.invoke_model.return_value = _mock_bedrock_text_response(
+            "Let me transfer you."
+        )
+
+        event = _make_lex_event(
+            input_transcript="I want to talk to a person",
+            session_attributes={
+                "pf_org_uuid": "test-uuid",
+                "caller_phone": "+1",
+                "call_id": "contact-esc",
+                "conversation_state": "escalating",
+            },
+        )
+        handler(event, {})
+        mock_write.assert_called_once()
+        call_args = mock_write.call_args[0][0]
+        assert call_args["outcome"] == "escalated"
+
+    @patch("lex_code_hook.handler._write_call_record")
+    @patch("lex_code_hook.handler._get_bedrock")
+    def test_escalation_reason_stored_in_call_record(self, mock_get_bedrock, mock_write):
+        from lex_code_hook.handler import handler
+
+        mock_client = MagicMock()
+        mock_get_bedrock.return_value = mock_client
+
+        mock_client.invoke_model.side_effect = [
+            _mock_bedrock_tool_use_response(
+                "escalate_to_human", {"reason": "emergency"}
+            ),
+            _mock_bedrock_text_response(
+                "If this is a medical emergency, please hang up and dial 911."
+            ),
+        ]
+
+        event = _make_lex_event(
+            input_transcript="I'm having chest pain",
+            session_attributes={"pf_org_uuid": "test-uuid", "caller_phone": "+1", "call_id": "c"},
+        )
+        handler(event, {})
+        mock_write.assert_called_once()
+        call_args = mock_write.call_args[0][0]
+        assert call_args["escalation_reason"] == "emergency"
+
+    @patch("lex_code_hook.handler._write_call_record")
+    @patch("lex_code_hook.handler._get_bedrock")
+    def test_elicit_intent_does_not_write_call_record(self, mock_get_bedrock, mock_write):
+        from lex_code_hook.handler import handler
+
+        mock_client = MagicMock()
+        mock_get_bedrock.return_value = mock_client
+        mock_client.invoke_model.return_value = _mock_bedrock_text_response(
+            "Could you tell me your name?"
+        )
+
+        event = _make_lex_event(
+            input_transcript="hello",
+            session_attributes={"pf_org_uuid": "test-uuid", "caller_phone": "+1", "call_id": "c"},
+        )
+        handler(event, {})
+        mock_write.assert_not_called()
+
+
 class TestMaxTurns:
     """Safety: if conversation exceeds max turns, close gracefully."""
 

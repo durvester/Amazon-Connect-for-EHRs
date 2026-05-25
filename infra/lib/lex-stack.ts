@@ -21,6 +21,8 @@ export interface LexStackProps extends cdk.StackProps {
   readonly auditBucketArn: string;
   readonly auditKmsKeyArn: string;
   readonly rateLimitTableArn: string;
+  readonly callsTableName?: string;
+  readonly callsTableArn?: string;
 }
 
 /**
@@ -93,6 +95,7 @@ export class LexStack extends cdk.Stack {
         AUDIT_BUCKET_NAME: props.auditBucketName,
         RATELIMIT_TABLE_NAME: props.rateLimitTableName,
         BEDROCK_MODEL_ID: "us.anthropic.claude-sonnet-4-6",
+        ...(props.callsTableName && { CALLS_TABLE_NAME: props.callsTableName }),
       },
     });
 
@@ -100,7 +103,12 @@ export class LexStack extends cdk.Stack {
     this.codeHookLambda.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:Query"],
-        resources: [props.practicesTableArn, props.tokensTableArn, props.rateLimitTableArn],
+        resources: [
+          props.practicesTableArn,
+          props.tokensTableArn,
+          props.rateLimitTableArn,
+          ...(props.callsTableArn ? [props.callsTableArn] : []),
+        ],
       }),
     );
     this.codeHookLambda.addToRolePolicy(

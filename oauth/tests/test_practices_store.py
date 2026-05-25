@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 import boto3
 import pytest
 from moto import mock_aws
@@ -88,6 +90,30 @@ def test_put_is_idempotent_overwrite():
     store.put(**{**common, "pf_client_id": "c2"})
     rec = store.get("pf-iio")
     assert rec.pf_client_id == "c2"
+
+
+@mock_aws
+def test_get_practice_with_business_hours():
+    ddb = _bootstrap_ddb()
+    _seed(ddb)
+    hours = {"mon": {"open": "08:00", "close": "17:00"}, "tue": {"open": "08:00", "close": "17:00"}}
+    ddb.update_item(
+        TableName=TABLE,
+        Key={"practice_id": {"S": "pf-001"}},
+        UpdateExpression="SET business_hours = :bh",
+        ExpressionAttributeValues={":bh": {"S": json.dumps(hours)}},
+    )
+    rec = PracticesStore(table_name=TABLE, region="us-east-1").get("pf-001")
+    assert rec.business_hours == hours
+    assert rec.business_hours["mon"]["open"] == "08:00"
+
+
+@mock_aws
+def test_get_practice_without_business_hours_returns_none():
+    ddb = _bootstrap_ddb()
+    _seed(ddb)
+    rec = PracticesStore(table_name=TABLE, region="us-east-1").get("pf-001")
+    assert rec.business_hours is None
 
 
 @mock_aws

@@ -5,6 +5,7 @@ import { loadEnv } from "../config/envs";
 import { AgentGatewayStack } from "../lib/agent-gateway-stack";
 import { ApiStack } from "../lib/api-stack";
 import { AuditStack } from "../lib/audit-stack";
+import { CallsStack } from "../lib/calls-stack";
 import { ConnectStack } from "../lib/connect-stack";
 import { LexStack } from "../lib/lex-stack";
 import { PhoneRoutingStack } from "../lib/phone-routing-stack";
@@ -47,6 +48,13 @@ const practicesStack = new PracticesStack(
   { env: cdkEnv, envConfig },
 );
 
+// -- Call metadata store (Session 0014) --
+const callsStack = new CallsStack(
+  app,
+  `${envConfig.resourcePrefix}-calls`,
+  { env: cdkEnv, envConfig },
+);
+
 // -- MCP tool catalog (ADR-0012) --
 const agentGateway = new AgentGatewayStack(
   app,
@@ -69,6 +77,8 @@ const lexStack = new LexStack(app, `${envConfig.resourcePrefix}-lex`, {
   auditBucketArn: auditStack.bucket.bucketArn,
   auditKmsKeyArn: auditStack.kmsKey.keyArn,
   rateLimitTableArn: rateLimitStack.table.tableArn,
+  callsTableName: callsStack.table.tableName,
+  callsTableArn: callsStack.table.tableArn,
 });
 
 // -- Voice surface: Connect instance + contact flow (ADR-0018) --
@@ -102,6 +112,9 @@ new ApiStack(app, `${envConfig.resourcePrefix}-api`, {
   env: cdkEnv,
   envConfig,
   phoneRoutingTable: phoneRouting.table,
+  practicesTable: practicesStack.practicesTable,
+  tokensTable: practicesStack.tokensTable,
+  oauthKmsKey: practicesStack.oauthKey,
   connectInstanceId: connectStack.connectInstance.ref,
   connectInstanceArn: connectStack.connectInstance.attrArn,
   pfClientSecretArn,

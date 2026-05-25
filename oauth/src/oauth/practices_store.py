@@ -37,6 +37,7 @@ class PracticeRecord:
     token_endpoint: str
     pf_client_id: str
     pf_client_secret_arn: str
+    business_hours: dict | None = None
 
 
 class PracticesStore:
@@ -61,12 +62,22 @@ class PracticesStore:
             raise PracticesStoreError(f"no practices row for {practice_id!r}")
 
         try:
+            bh_raw = item.get("business_hours", {}).get("S")
+            business_hours = None
+            if bh_raw:
+                import json
+                try:
+                    business_hours = json.loads(bh_raw)
+                except (json.JSONDecodeError, TypeError):
+                    pass
+
             return PracticeRecord(
                 practice_id=item["practice_id"]["S"],
                 fhir_base_url=item["fhir_base_url"]["S"],
                 token_endpoint=item["token_endpoint"]["S"],
                 pf_client_id=item["pf_client_id"]["S"],
                 pf_client_secret_arn=item["pf_client_secret_arn"]["S"],
+                business_hours=business_hours,
             )
         except KeyError as e:
             raise PracticesStoreError(

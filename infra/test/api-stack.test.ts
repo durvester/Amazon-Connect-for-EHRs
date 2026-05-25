@@ -1,6 +1,7 @@
 import * as cdk from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import * as kms from "aws-cdk-lib/aws-kms";
 
 import { envs } from "../config/envs";
 import { ApiStack } from "../lib/api-stack";
@@ -12,22 +13,30 @@ const INSTANCE_ARN = `arn:aws:connect:us-east-1:086514900943:instance/${INSTANCE
 
 function build() {
   const app = new cdk.App();
-  // The phone-routing table is created by PhoneRoutingStack in real
-  // deploys; this test imports an existing table to keep the snapshot
-  // hermetic.
-  const phoneRoutingStack = new cdk.Stack(app, "PhoneRoutingFixture", {
+  const fixtureStack = new cdk.Stack(app, "Fixtures", {
     env: { account: envs.qa.account, region: envs.qa.region },
   });
   const phoneRoutingTable = dynamodb.Table.fromTableName(
-    phoneRoutingStack,
-    "FixtureTable",
-    "pf-voice-qa-phone-routing",
+    fixtureStack, "PhoneRouting", "pf-voice-qa-phone-routing",
+  );
+  const practicesTable = dynamodb.Table.fromTableName(
+    fixtureStack, "Practices", "pf-voice-qa-practices",
+  );
+  const tokensTable = dynamodb.Table.fromTableName(
+    fixtureStack, "Tokens", "pf-voice-qa-oauth-tokens",
+  );
+  const oauthKmsKey = kms.Key.fromKeyArn(
+    fixtureStack, "OAuthKey",
+    "arn:aws:kms:us-east-1:086514900943:key/test-key-id",
   );
 
   const stack = new ApiStack(app, "pf-voice-qa-api", {
     env: { account: envs.qa.account, region: envs.qa.region },
     envConfig: envs.qa,
     phoneRoutingTable,
+    practicesTable,
+    tokensTable,
+    oauthKmsKey,
     connectInstanceId: INSTANCE_ID,
     connectInstanceArn: INSTANCE_ARN,
     pfClientSecretArn: PF_CLIENT_SECRET_ARN,
@@ -46,21 +55,14 @@ describe("ApiStack (qa)", () => {
     });
   });
 
-  it("creates a KMS-encrypted oauth-tokens table partitioned by practice_id", () => {
+  it("does not create practices or tokens tables (owned by PracticesStack)", () => {
     const t = build();
-    t.hasResourceProperties("AWS::DynamoDB::Table", {
-      TableName: "pf-voice-qa-oauth-tokens",
-      KeySchema: [{ AttributeName: "practice_id", KeyType: "HASH" }],
-      SSESpecification: Match.objectLike({ SSEEnabled: true, SSEType: "KMS" }),
-    });
-  });
-
-  it("creates a practices table partitioned by practice_id", () => {
-    const t = build();
-    t.hasResourceProperties("AWS::DynamoDB::Table", {
-      TableName: "pf-voice-qa-practices",
-      KeySchema: [{ AttributeName: "practice_id", KeyType: "HASH" }],
-    });
+    const tables = t.findResources("AWS::DynamoDB::Table");
+    const tableNames = Object.values(tables).map(
+      (r: any) => r.Properties?.TableName,
+    );
+    expect(tableNames).not.toContain("pf-voice-qa-practices");
+    expect(tableNames).not.toContain("pf-voice-qa-oauth-tokens");
   });
 
   it("creates the Python 3.12 Lambda with the right env wiring", () => {
