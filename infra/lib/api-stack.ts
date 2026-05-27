@@ -114,15 +114,13 @@ export class ApiStack extends cdk.Stack {
     phoneRoutingTable.grantReadWriteData(this.handler);
     oauthKmsKey.grantEncryptDecrypt(this.handler);
 
-    // Connect: search + claim DIDs against any phone number in the
-    // account. The action surface intentionally excludes ReleaseChannel.
     this.handler.addToRolePolicy(
       new iam.PolicyStatement({
         actions: [
           "connect:SearchAvailablePhoneNumbersV2",
           "connect:ClaimPhoneNumber",
         ],
-        resources: ["*"],
+        resources: [connectInstanceArn, `${connectInstanceArn}/*`],
       }),
     );
 

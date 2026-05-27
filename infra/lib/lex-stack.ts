@@ -125,13 +125,18 @@ export class LexStack extends cdk.Stack {
     this.codeHookLambda.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["bedrock:InvokeModel"],
-        resources: ["*"],
+        resources: [
+          `arn:aws:bedrock:${this.region}::foundation-model/anthropic.*`,
+          `arn:aws:bedrock:${this.region}::foundation-model/us.anthropic.*`,
+        ],
       }),
     );
     this.codeHookLambda.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["secretsmanager:GetSecretValue"],
-        resources: [`arn:aws:secretsmanager:${this.region}:${this.account}:secret:*`],
+        resources: [
+          `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${envConfig.resourcePrefix}-*`,
+        ],
       }),
     );
 
