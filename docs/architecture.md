@@ -43,7 +43,7 @@ This document is the **current** target architecture. If you change the architec
       e. Return ElicitIntent + Claude's text → Nova Sonic speaks it
       f. When done → Close(Fulfilled/Failed) → back to contact flow
        │
-       ▼  (direct Lambda import; Gateway is for external MCP consumers)
+       ▼  (direct Lambda import within the code-hook bundle)
  5. TOOL LAMBDA (thin FHIR adapter; ADR-0013):
       - Rate-limit gate keyed on (pf_org_uuid, ANI, day-bucket)
       - Resolve per-practice credentials; refresh on near-expiry or 401
@@ -64,13 +64,10 @@ The key handoffs:
 - **Lex → code-hook Lambda:** FallbackIntent fulfillmentCodeHook. Fires
   every turn. Code-hook returns `ElicitIntent` (continue) or `Close` (done).
 - **Code-hook → Claude:** Bedrock InvokeModel. ~1-3s per turn. The
-  verification prompt from `agent/prompts/verification.md` is the system
-  prompt. Claude decides what to say and when to call tools.
-- **Code-hook → lookup_patient:** Direct import (both in same Lambda
-  package). No Gateway hop for the call path. Gateway remains for
-  external MCP consumers.
-- **Code-hook Lambda → AgentCore Gateway:** MCP tool invocation for
-  FHIR lookups. 30s per-tool timeout (ADR-0012).
+  verification prompt is the system prompt. Claude decides what to say
+  and when to call tools.
+- **Code-hook → tools:** Direct import (lookup_patient, fhir_query,
+  etc. are bundled in the same Lambda package). No network hop.
 
 ## Component map
 
@@ -80,8 +77,7 @@ The key handoffs:
 | Voice + speech | Lex V2 bot with Nova 2 Sonic (`UnifiedSpeechSettings`) | Bidirectional speech-to-speech; slot collection |
 | Dialog orchestration | Lex code-hook Lambda | Verification logic, FHIR tool invocation, conversation state |
 | DID → practice_id router | Router Lambda + DynamoDB `phone_routing` (ADR-0014) | Read at every call start via `InvokeLambdaFunction` |
-| Tool catalog | Bedrock AgentCore Gateway | Exposes our Lambdas as MCP tools; ToolSchema as contract (ADR-0012) |
-| Tool: `lookup_patient` | Python Lambda + `tool_schema.json` | Calls Practice Fusion FHIR `Patient?telecom=&birthdate=` (ADR-0006) |
+| Tool: `lookup_patient` | Python module (bundled in code-hook Lambda) | Calls Practice Fusion FHIR `Patient?telecom=&birthdate=` (ADR-0006) |
 | Tool: `lab_result_status` (future) | Python Lambda + `tool_schema.json` | DiagnosticReport status query |
 | Tool: `visit_summary` (future) | Python Lambda + `tool_schema.json` | Encounter + active CarePlan summary |
 | Tool: `document_status` (future) | Python Lambda + `tool_schema.json` | DocumentReference status query |

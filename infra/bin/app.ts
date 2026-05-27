@@ -2,7 +2,6 @@
 import * as cdk from "aws-cdk-lib";
 
 import { loadEnv } from "../config/envs";
-import { AgentGatewayStack } from "../lib/agent-gateway-stack";
 import { ApiStack } from "../lib/api-stack";
 import { AuditStack } from "../lib/audit-stack";
 import { CallsStack } from "../lib/calls-stack";
@@ -52,13 +51,6 @@ const practicesStack = new PracticesStack(
 const callsStack = new CallsStack(
   app,
   `${envConfig.resourcePrefix}-calls`,
-  { env: cdkEnv, envConfig },
-);
-
-// -- MCP tool catalog (ADR-0012) --
-const agentGateway = new AgentGatewayStack(
-  app,
-  `${envConfig.resourcePrefix}-agent-gateway`,
   { env: cdkEnv, envConfig },
 );
 
