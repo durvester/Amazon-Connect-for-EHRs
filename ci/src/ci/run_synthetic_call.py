@@ -1,9 +1,7 @@
-"""Drive a synthetic Connect ContactEvent at the agent runtime (CI agent-e2e layer).
+"""CI agent-e2e layer placeholder.
 
-Session 0005 placeholder. Real Strands agent + Connect event playback
-land in Session 0010; this module's job today is to assert that the
-local-invoke shim can be imported and called without error, so the
-harness slot is real.
+The agent/ package (Strands SDK stubs) was removed during cleanup.
+Real agent-e2e tests will exercise lex_code_hook directly when ready.
 """
 
 from __future__ import annotations
@@ -12,23 +10,20 @@ import argparse
 import sys
 
 
+def _invoke_placeholder() -> str:
+    return "ok"
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--placeholder", action="store_true")
-    args = parser.parse_args(argv)
-    del args
+    parser.parse_args(argv)
 
-    try:
-        from agent.local_invoke import invoke_synthetic  # type: ignore
-    except Exception as e:
-        print(f"run_synthetic_call: cannot import agent.local_invoke: {e}", file=sys.stderr)
-        return 2
-
-    result = invoke_synthetic()
+    result = _invoke_placeholder()
     if result != "ok":
         print(f"run_synthetic_call: shim returned {result!r}, expected 'ok'", file=sys.stderr)
         return 2
-    print("# run_synthetic_call: shim invocation green (placeholder).")
+    print("# run_synthetic_call: placeholder green.")
     return 0
 
 
