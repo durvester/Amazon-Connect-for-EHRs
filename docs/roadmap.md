@@ -1,17 +1,14 @@
-# Roadmap — re-sequenced session plan from 0004 onward
+# Roadmap
 
-> **PIVOT NOTICE (Session 0007, 2026-05-23).** The voice stack pivoted to
-> the Nov-2025 Connect-native AI agent + AgentCore Gateway + MCP-tools
-> pattern (see ADR-0011 / 0012 / 0013 / 0014, and the plan at
-> `/Users/m858450/.claude/plans/i-spoke-to-somone-expressive-cake.md`).
-> Sessions 0007 below is **rewritten** to reflect the pivot. Sessions
-> 0008–0015 are being progressively revised — the session-0007 plan
-> table is the canonical short-form successor map; the long-form
-> entries in this file from "Session 0008" downward are pre-pivot text
-> that still describes the right *direction* (OAuth onboarding API,
-> per-tool sessions, observability, pilot cutover) but the agent-loop
-> framing (Strands runtime, custom Connect→AgentCore wiring) is stale.
-> When in doubt, prefer ADR-0011 + the plan file + this session's log.
+> **Updated Session 0017 (2026-05-27).** Codebase cleanup complete. All dead
+> code from Strands/AgentCore/POC pivots removed. Architecture settled on
+> Lex + Nova Sonic + code-hook Lambda calling Claude (ADR-0018/0019).
+> Forward plan below focuses on multi-practice scale-out.
+>
+> Sessions 0001-0016 are history (see `docs/sessions/`). The session-level
+> plans below from 0004-0016 are historical — they describe earlier
+> directions that evolved during implementation. The **current forward
+> plan starts at Session 0018** at the bottom of this file.
 
 This is the forward-looking master plan. Per-session logs in `docs/sessions/`
 remain the authoritative backward record; this file describes what is *next*
@@ -760,3 +757,83 @@ blocking earlier sessions, but the answers shape Sessions 0008+:
 4. Provider-offboarding behavior — does PF invalidate refresh tokens
    when the granting clinician leaves the practice? If so, what's the
    detection signal we get?
+
+---
+
+## Forward Plan: Multi-Practice Scale-Out (Session 0018+)
+
+### Current State (Session 0017)
+
+One pilot practice live on +16156250631. Architecture is multi-tenant by design:
+- `pf_org_uuid` is the practice key everywhere (ADR-0020)
+- `phone_routing` table maps DID → practice at every call
+- `practices` + `oauth-tokens` tables are per-practice
+- OAuth onboarding (`/oauth/start` → `/oauth/callback`) provisions end-to-end
+- PF auth scales inherently — each practice authorizes the Provider App once, gets their own KMS-encrypted refresh token
+
+### The Practice Signup Journey (target)
+
+```
+Practice admin visits dashboard
+  → Signs in (Cognito)
+  → Clicks "Connect Practice Fusion"
+  → Redirected to PF OAuth (authorization_code + PKCE)
+  → Grants user/Patient.read + offline_access
+  → Callback writes: practices row, KMS-encrypted tokens, claims DID, writes phone_routing
+  → Practice sees: "Your verification line is +1-XXX-XXX-XXXX"
+  → Practice configures call forwarding (or publishes the DID directly)
+  → Calls flow immediately
+```
+
+### Scale-Out Jobs-To-Be-Done
+
+**S1: "Let me sign up my practice in under 5 minutes"**
+- Cognito user pool + hosted UI for practice staff auth
+- Dashboard (React app in `web/`): onboarding wizard, call history, settings
+- Backend API: implement calls list + practice config routes
+- Auth middleware: Cognito JWT verification
+
+**S2: "Give me a phone number patients can call"**
+- Number selection: area code picker via `SearchAvailablePhoneNumbersV2` `PhoneNumberPrefix`
+- Number porting: `CreatePhoneNumberOrder` for practices keeping their existing number
+- DID inventory: pre-reserve pool for instant assignment at scale
+
+**S3: "I want to see how calls are going"**
+- Call history page from `calls` table (already populated by lex_code_hook)
+- Metrics: verification success rate, call duration, escalation reasons
+
+**S4: "Don't break my existing phone setup"**
+- Call forwarding setup wizard (carrier-specific instructions)
+- Business hours config per practice
+- After-hours behavior: configurable message + disconnect vs voicemail
+
+### How PF Auth Scales
+
+No architectural changes needed:
+1. One Provider App per environment (ADR-0016): all practices share one `client_id`/`client_secret`
+2. Token refresh is per-practice, on-demand: `get_credentials(pf_org_uuid)` handles refresh
+3. Invalid grant → reconnect: `InvalidGrantError` → `status=needs_reconnect` → dashboard shows reconnect
+4. 20K practices = 20K rows in oauth-tokens: DynamoDB PAY_PER_REQUEST, single-digit ms
+
+### Monetization
+
+Recommended for pilot: monthly subscription ($99/mo) with 30-day free trial.
+Alternative models: per-call ($0.10-0.25), freemium (free verification, paid JTBDs 2-4).
+
+### Bulk Onboarding (20K practices)
+
+DID claiming rate-limited at ~1-2 RPS. Strategies:
+- SQS queue + Lambda consumer for async DID claiming
+- Pre-reserve DID pool for instant assignment on signup
+
+### Implementation Priority
+
+| Session | What | JTBD |
+|---------|------|------|
+| 0018 | Cognito user pool + auth middleware + dashboard skeleton | S1 |
+| 0019 | Dashboard: onboarding wizard + call history page | S1, S3 |
+| 0020 | Number selection UI (area code picker) | S2 |
+| 0021 | Business hours config + after-hours behavior | S4 |
+| 0022 | Number porting flow | S2 |
+| 0023 | Billing integration (Stripe subscription) | Monetization |
+| 0024 | Bulk onboarding (SQS queue + DID pool) | Scale |
