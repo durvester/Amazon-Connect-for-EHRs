@@ -11,6 +11,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 5. **Before architecture changes, the design must work back from quantifiable practice JTBDs**, not forward from AWS service capabilities. Each proposed primitive must answer "which JTBD does this serve, and what business metric does it move?" in one sentence, or it's not ready. See `memory/feedback_jtbd_drives_architecture.md`.
 6. Before any architectural change, write a new ADR (`docs/decisions/NNNN-<slug>.md`). Don't quietly drift from the documented design. ADRs proposing pivots must satisfy step 4 (primary-source verification) and step 5 (JTBD anchor).
 
+## Build, test, lint
+
+Prerequisites: Python 3.12, Node 22, AWS CLI v2 (SSO to `086514900943`, `us-east-1`), CDK v2.
+
+```bash
+make bootstrap          # one-time: venv + pip install all Python pkgs + npm install for infra/ and web/
+make test               # all tests: pytest (every Python pkg) + vitest (web) + jest (infra)
+make lint               # ruff (Python) + tsc --noEmit (web + infra)
+make synth              # cdk synth snapshot
+make test-ci            # four-layer CI: unit → svc-integration → ui-e2e → agent-e2e
+```
+
+Run a single Python package's tests (from repo root):
+```bash
+cd tools/lookup_patient && PYTHONPATH=src .venv/bin/python -m pytest -q
+```
+
+Run only unit tests (skip integration):
+```bash
+cd tools/lookup_patient && PYTHONPATH=src .venv/bin/python -m pytest -q -m "not integration"
+```
+
+Web dev server: `cd web && npm run dev`
+Web tests: `cd web && npm test -- --run`
+Infra tests: `cd infra && npm test`
+
+Python packages use `src/` layout with editable installs (`pip install -e .[dev]`). Tests require `PYTHONPATH=src` when running from a package directory. Ruff line-length is 100, target Python 3.12.
+
+## Package map
+
+All Python packages follow the same pattern: `<pkg>/src/<module>/`, `<pkg>/tests/`, `<pkg>/pyproject.toml`.
+
+| Package | What it is |
+|---|---|
+| `agent/` | Voice agent logic — Claude prompt + conversation loop. Prompt lives at `agent/src/agent/prompts/verification.md` |
+| `tools/lex_code_hook/` | THE Lambda entry point: Lex calls this every turn, it invokes Claude via Bedrock and dispatches tool calls |
+| `tools/lookup_patient/` | FHIR Patient search by phone/name/DOB |
+| `tools/fhir_query/` | Generic FHIR query tool — Claude composes queries, code enforces allowlists + projections |
+| `tools/router_lookup/` | DID → `pf_org_uuid` lookup from `phone_routing` DynamoDB table |
+| `tools/complete_verification/` | Marks verification complete in call state |
+| `tools/escalate_to_human/` | Transfers call to human agent queue |
+| `oauth/` | SMART-on-FHIR OAuth onboarding (FastAPI on Lambda) |
+| `api/` | Practice dashboard API |
+| `routing/` | Phone routing management |
+| `audit/` | PHI audit logging |
+| `ci/` | CI harness helpers (token minting, local stack, synthetic calls) |
+| `infra/` | CDK app (TypeScript). Stacks in `infra/lib/`: connect, lex, phone-routing, practices, calls, api, audit, rate-limit, agent-gateway |
+| `web/` | Practice dashboard (React + Vite + TypeScript + Playwright for e2e) |
+
 ## Conventions (non-obvious)
 
 - **TDD always.** Write the failing test first, then implement. Tests live next to code (`<package>/tests/`).
