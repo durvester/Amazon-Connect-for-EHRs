@@ -16,7 +16,6 @@ function buildStack(): cdk.Stack {
     rateLimitTableName: "pf-voice-qa-rate-limit",
     practicesTableArn: "arn:aws:dynamodb:us-east-1:086514900943:table/pf-voice-qa-practices",
     tokensTableArn: "arn:aws:dynamodb:us-east-1:086514900943:table/pf-voice-qa-oauth-tokens",
-    oauthKmsKeyArnForGrant: "arn:aws:kms:us-east-1:086514900943:key/test-key-id",
     auditBucketArn: "arn:aws:s3:::pf-voice-qa-audit",
     auditKmsKeyArn: "arn:aws:kms:us-east-1:086514900943:key/test-audit-key-id",
     rateLimitTableArn: "arn:aws:dynamodb:us-east-1:086514900943:table/pf-voice-qa-rate-limit",

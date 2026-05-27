@@ -73,7 +73,6 @@ const lexStack = new LexStack(app, `${envConfig.resourcePrefix}-lex`, {
   rateLimitTableName: rateLimitStack.table.tableName,
   practicesTableArn: practicesStack.practicesTable.tableArn,
   tokensTableArn: practicesStack.tokensTable.tableArn,
-  oauthKmsKeyArnForGrant: practicesStack.oauthKey.keyArn,
   auditBucketArn: auditStack.bucket.bucketArn,
   auditKmsKeyArn: auditStack.kmsKey.keyArn,
   rateLimitTableArn: rateLimitStack.table.tableArn,

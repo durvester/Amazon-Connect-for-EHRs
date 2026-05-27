@@ -58,9 +58,7 @@ export class AuditStack extends cdk.Stack {
       ),
       versioned: true,
       removalPolicy: removal,
-      autoDeleteObjects: envConfig.removalPolicy === "DESTROY" ? false : false,
-      // ^ autoDeleteObjects MUST stay false even in QA — Object Lock would
-      //   block the delete anyway and produce a confusing failure.
+      autoDeleteObjects: false, // Object Lock blocks deletion regardless of env
     });
 
     new cdk.CfnOutput(this, "AuditBucketName", { value: this.bucket.bucketName });

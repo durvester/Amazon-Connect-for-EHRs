@@ -26,8 +26,8 @@ os.environ.setdefault("OAUTH_KMS_KEY_ARN", "alias/pf-voice-qa-oauth-key")
 
 from oauth.credentials import get_credentials
 
-PRACTICE_ID = "b4ab304f-d1ac-4565-8dca-992b589422a7"
-PATIENT_ID = "b79082d9-548c-454e-9fc7-ce19ab630776"  # Mohit Durve
+PRACTICE_ID = os.environ.get("PF_ORG_UUID", "b4ab304f-d1ac-4565-8dca-992b589422a7")
+PATIENT_ID = os.environ.get("PATIENT_ID", "b79082d9-548c-454e-9fc7-ce19ab630776")
 
 RESOURCES = [
     ("DiagnosticReport", {"patient": PATIENT_ID, "_count": "5"}),

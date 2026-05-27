@@ -17,7 +17,6 @@ export interface LexStackProps extends cdk.StackProps {
   readonly rateLimitTableName: string;
   readonly practicesTableArn: string;
   readonly tokensTableArn: string;
-  readonly oauthKmsKeyArnForGrant: string;
   readonly auditBucketArn: string;
   readonly auditKmsKeyArn: string;
   readonly rateLimitTableArn: string;
@@ -114,7 +113,7 @@ export class LexStack extends cdk.Stack {
     this.codeHookLambda.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["kms:Decrypt", "kms:Encrypt", "kms:GenerateDataKey"],
-        resources: [props.oauthKmsKeyArnForGrant, props.auditKmsKeyArn],
+        resources: [props.oauthKmsKeyArn, props.auditKmsKeyArn],
       }),
     );
     this.codeHookLambda.addToRolePolicy(

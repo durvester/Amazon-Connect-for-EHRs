@@ -19,8 +19,6 @@ from ci._fixture import FixtureUnavailable, decrypt_bundle
 
 
 def _discover_token_endpoint(fhir_base_url: str) -> str:
-    import requests
-
     from oauth.well_known import fetch_smart_configuration  # type: ignore
 
     try:
@@ -29,7 +27,6 @@ def _discover_token_endpoint(fhir_base_url: str) -> str:
         # Fallback: PF's per-tenant convention. Discovery is preferred (see
         # Session 0004 finding) but should not block CI if .well-known is
         # transiently unavailable.
-        del requests  # silence unused-import linter when fallback fires
         return urljoin(fhir_base_url.rstrip("/") + "/", "token")
 
 
