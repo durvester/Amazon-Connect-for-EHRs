@@ -771,3 +771,21 @@ class TestMaxTurns:
 
         assert result["sessionState"]["dialogAction"]["type"] == "Close"
         assert "transfer" in result["messages"][0]["content"].lower() or "help" in result["messages"][0]["content"].lower()
+
+
+class TestPromptLoadingSafety:
+
+    def test_missing_prompt_file_raises_runtime_error(self, tmp_path):
+        import lex_code_hook.handler as mod
+
+        orig = mod._system_prompt_text
+        orig_file = mod.__file__
+        try:
+            mod._system_prompt_text = None
+            mod.__file__ = str(tmp_path / "handler.py")
+            import pytest
+            with pytest.raises(RuntimeError, match="System prompt file missing"):
+                mod._load_system_prompt()
+        finally:
+            mod._system_prompt_text = orig
+            mod.__file__ = orig_file

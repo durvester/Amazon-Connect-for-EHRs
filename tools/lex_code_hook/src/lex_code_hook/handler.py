@@ -80,18 +80,13 @@ def _load_system_prompt() -> str:
         prompt_path = os.path.join(os.path.dirname(__file__), "prompts", "patient_service.md")
         if not os.path.exists(prompt_path):
             prompt_path = os.path.join(os.path.dirname(__file__), "prompts", "verification.md")
-        if os.path.exists(prompt_path):
-            with open(prompt_path) as f:
-                _system_prompt_text = f.read()
-        else:
-            _system_prompt_text = os.environ.get("VERIFICATION_PROMPT", "")
-            if not _system_prompt_text:
-                _system_prompt_text = (
-                    "You are answering the phone for a medical practice. "
-                    "Your job is to verify the caller's identity by collecting "
-                    "their first name, last name, and date of birth, then calling "
-                    "the lookup_patient tool. Follow HIPAA privacy rules strictly."
-                )
+        if not os.path.exists(prompt_path):
+            raise RuntimeError(
+                "System prompt file missing from Lambda bundle. "
+                "Expected prompts/patient_service.md or prompts/verification.md."
+            )
+        with open(prompt_path) as f:
+            _system_prompt_text = f.read()
     return _system_prompt_text
 
 
