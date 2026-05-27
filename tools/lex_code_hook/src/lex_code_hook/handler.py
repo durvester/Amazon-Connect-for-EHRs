@@ -16,7 +16,6 @@ import logging
 import os
 import time
 from datetime import datetime, timezone
-from typing import Any
 
 import boto3
 
@@ -214,8 +213,8 @@ def _proactive_phone_probe(session_attrs: dict) -> dict | None:
         return None
 
     try:
-        from oauth.credentials import CredentialsExpired, get_credentials
-        from lookup_patient.fhir_client import FhirClientError, read_patient, search_patient_by_phone
+        from oauth.credentials import get_credentials
+        from lookup_patient.fhir_client import read_patient, search_patient_by_phone
 
         base_url, access_token, refresh_ctx = get_credentials(practice_id)
         raw = search_patient_by_phone(

@@ -11,8 +11,6 @@ from __future__ import annotations
 import json
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 
 def _make_lex_event(
     *,
@@ -117,7 +115,7 @@ class TestFulfillmentCallsBedrock:
                 "call_id": "contact-abc",
             },
         )
-        result = handler(event, {})
+        handler(event, {})
 
         mock_client.invoke_model.assert_called_once()
         call_args = mock_client.invoke_model.call_args
@@ -263,7 +261,7 @@ class TestToolExecution:
             input_transcript="test",
             session_attributes={"pf_org_uuid": "x", "caller_phone": "+1", "call_id": "c"},
         )
-        result = handler(event, {})
+        handler(event, {})
 
         second_call_body = json.loads(mock_client.invoke_model.call_args_list[1][1]["body"])
         tool_result_msg = second_call_body["messages"][-1]
@@ -399,7 +397,7 @@ class TestFhirQueryGate:
             input_transcript="are my labs back?",
             session_attributes={"pf_org_uuid": "test-uuid", "caller_phone": "+1", "call_id": "c"},
         )
-        result = handler(event, {})
+        handler(event, {})
 
         second_call_body = json.loads(mock_client.invoke_model.call_args_list[1][1]["body"])
         tool_result_msg = second_call_body["messages"][-1]
@@ -615,7 +613,7 @@ class TestPromptHardening:
                 "business_hours_display": "Mon-Fri 8am-5pm",
             },
         )
-        result = handler(event, {})
+        handler(event, {})
 
         call_body = json.loads(mock_client.invoke_model.call_args[1]["body"])
         system_text = " ".join(msg.get("text", "") for msg in call_body["system"] if isinstance(msg, dict))
@@ -638,7 +636,7 @@ class TestPromptHardening:
                 "call_id": "c",
             },
         )
-        result = handler(event, {})
+        handler(event, {})
 
         call_body = json.loads(mock_client.invoke_model.call_args[1]["body"])
         system_text = " ".join(msg.get("text", "") for msg in call_body["system"] if isinstance(msg, dict))

@@ -1,6 +1,6 @@
 .PHONY: bootstrap venv test test-ci test-ci-unit test-ci-svc test-ci-ui test-ci-agent lint synth spike-fhir seed-dev-token clean help
 
-PYTHON_PKGS := agent tools/lookup_patient tools/complete_verification tools/escalate_to_human tools/router_lookup tools/lex_code_hook tools/fhir_query audit oauth routing api ci
+PYTHON_PKGS := agent tools/lookup_patient tools/escalate_to_human tools/router_lookup tools/lex_code_hook tools/fhir_query audit oauth routing api ci
 NODE_PKGS := infra web
 VENV := .venv
 PY := $(CURDIR)/$(VENV)/bin/python

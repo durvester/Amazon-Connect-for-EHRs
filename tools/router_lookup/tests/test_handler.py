@@ -9,8 +9,6 @@ it as a contact attribute.
 
 from __future__ import annotations
 
-import os
-
 import boto3
 import pytest
 from moto import mock_aws

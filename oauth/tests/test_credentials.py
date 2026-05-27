@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import time
 
 import boto3
@@ -10,7 +9,7 @@ import pytest
 import responses
 from moto import mock_aws
 
-from oauth.credentials import CredentialsExpired, RefreshContext, get_credentials
+from oauth.credentials import CredentialsExpired, get_credentials
 from oauth.practices_store import PracticesStore
 from oauth.token_store import TokenStore
 
