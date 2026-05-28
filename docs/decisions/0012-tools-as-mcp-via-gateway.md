@@ -1,6 +1,6 @@
 # ADR-0012: Tools-as-MCP-via-Gateway as the canonical extensibility surface
 
-**Status:** Accepted
+**Status:** Superseded by [ADR-0018](0018-lex-orchestrates-nova-sonic-and-agentcore.md) / [ADR-0019](0019-llm-powered-code-hook.md) — the code-hook Lambda imports tools directly; the AgentCore Gateway stack was removed in Session 0017.
 
 **Date:** 2026-05-23 (Session 0007)
 

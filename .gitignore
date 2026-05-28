@@ -12,6 +12,9 @@ htmlcov/
 dist/
 build/
 
+# Test artifacts
+test-results/
+
 # Node
 node_modules/
 .pnp.*
