@@ -101,3 +101,5 @@
 - build/ directories exist on disk (setuptools artifacts) but are gitignored. They're harmless.
 - `SearchAvailablePhoneNumbersV2` IAM resource is scoped to Connect instance ARN. If a second Connect instance is added, the policy needs updating.
 - The Bedrock model IAM is scoped to `anthropic.*` and `us.anthropic.*` patterns. If switching to a non-Anthropic model, update lex-stack.ts.
+- **CDK deployment note:** The AgentGatewayStack was removed from code but still exists in AWS as a CloudFormation stack. To clean it up, run: `cd infra && npx cdk destroy pf-voice-qa-agent-gateway -c env=qa`. This is safe — nothing depends on it. Do this before or during the next `cdk deploy`.
+- **What needs redeploying:** (a) Lambda code changes (prompt fix, lint) take effect only after `cdk deploy` — the live system works fine meanwhile since the prompt files exist in the current bundle. (b) IAM scoping changes need a deploy to take effect. (c) No table/KMS/Connect changes — those resources are unchanged.
