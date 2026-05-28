@@ -126,10 +126,12 @@ export class LexStack extends cdk.Stack {
       new iam.PolicyStatement({
         actions: ["bedrock:InvokeModel"],
         resources: [
-          `arn:aws:bedrock:${this.region}::foundation-model/anthropic.*`,
-          `arn:aws:bedrock:${this.region}::foundation-model/us.anthropic.*`,
-          `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/anthropic.*`,
-          `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/us.anthropic.*`,
+          // Cross-region inference profiles (us.anthropic.*) fan out to
+          // multiple regions and ARN forms — foundation-model in various
+          // regions + inference-profile in the home region. Scoping to
+          // specific ARNs broke live calls (Session 0017 incident).
+          // TODO: research the exact ARN set and re-scope.
+          "*",
         ],
       }),
     );
