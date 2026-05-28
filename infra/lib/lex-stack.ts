@@ -128,6 +128,8 @@ export class LexStack extends cdk.Stack {
         resources: [
           `arn:aws:bedrock:${this.region}::foundation-model/anthropic.*`,
           `arn:aws:bedrock:${this.region}::foundation-model/us.anthropic.*`,
+          `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/anthropic.*`,
+          `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/us.anthropic.*`,
         ],
       }),
     );
