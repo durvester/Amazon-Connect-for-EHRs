@@ -1,131 +1,119 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" font-family="Inter, -apple-system, sans-serif" font-size="12">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 580" font-family="Inter, -apple-system, sans-serif" font-size="12">
   <defs>
     <marker id="a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#475569"/>
     </marker>
+    <marker id="a-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#16a34a"/>
+    </marker>
   </defs>
 
-  <rect width="900" height="550" fill="#f8fafc" rx="8"/>
-  <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Practice Onboarding — One-Time Setup Flow</text>
+  <rect width="920" height="580" fill="#f8fafc" rx="8"/>
+  <text x="460" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Practice Onboarding — SMART-on-FHIR OAuth Setup</text>
 
-  <!-- Swim lanes -->
-  <rect x="20" y="50" width="130" height="480" rx="6" fill="#dbeafe" opacity="0.3"/>
-  <text x="85" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Practice Staff</text>
+  <rect x="20" y="50" width="140" height="510" rx="6" fill="#dbeafe" opacity="0.2"/>
+  <text x="90" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Practice Staff</text>
 
-  <rect x="160" y="50" width="160" height="480" rx="6" fill="#f0fdf4" opacity="0.3"/>
-  <text x="240" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">Our Dashboard</text>
+  <rect x="170" y="50" width="160" height="510" rx="6" fill="#f0fdf4" opacity="0.2"/>
+  <text x="250" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">Dashboard</text>
 
-  <rect x="330" y="50" width="180" height="480" rx="6" fill="#fef3c7" opacity="0.3"/>
-  <text x="420" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Onboarding API</text>
+  <rect x="340" y="50" width="180" height="510" rx="6" fill="#fef3c7" opacity="0.2"/>
+  <text x="430" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Onboarding API</text>
 
-  <rect x="520" y="50" width="140" height="480" rx="6" fill="#fce7f3" opacity="0.3"/>
-  <text x="590" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#9d174d">Practice Fusion</text>
+  <rect x="530" y="50" width="150" height="510" rx="6" fill="#fce7f3" opacity="0.2"/>
+  <text x="605" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#9d174d">EHR (FHIR)</text>
 
-  <rect x="670" y="50" width="210" height="480" rx="6" fill="#fff7ed" opacity="0.3"/>
-  <text x="775" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#c2410c">AWS (DDB / Connect / SM)</text>
+  <rect x="690" y="50" width="210" height="510" rx="6" fill="#fff7ed" opacity="0.2"/>
+  <text x="795" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#c2410c">AWS (DDB / Connect)</text>
 
-  <!-- Step 1: Sign up -->
-  <rect x="35" y="90" width="100" height="35" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
-  <text x="85" y="112" text-anchor="middle" font-size="10" fill="#1e40af">Maria signs up</text>
+  <rect x="35" y="92" width="110" height="32" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="90" y="112" text-anchor="middle" font-size="10" fill="#1e40af">Staff signs up</text>
 
-  <line x1="135" y1="107" x2="175" y2="107" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="145" y1="108" x2="183" y2="108" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <rect x="175" y="90" width="130" height="35" rx="6" fill="#dcfce7" stroke="#22c55e"/>
-  <text x="240" y="106" text-anchor="middle" font-size="10" fill="#166534">Create Cognito</text>
-  <text x="240" y="118" text-anchor="middle" font-size="10" fill="#166534">account</text>
+  <rect x="185" y="92" width="130" height="32" rx="6" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="250" y="112" text-anchor="middle" font-size="10" fill="#166534">Create account</text>
 
-  <!-- Step 2: Click Connect PF -->
-  <rect x="35" y="145" width="100" height="35" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
-  <text x="85" y="161" text-anchor="middle" font-size="10" fill="#1e40af">Dr. Patel clicks</text>
-  <text x="85" y="173" text-anchor="middle" font-size="10" fill="#1e40af">"Connect PF"</text>
+  <rect x="35" y="148" width="110" height="32" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="90" y="168" text-anchor="middle" font-size="10" fill="#1e40af">Click "Connect EHR"</text>
 
-  <line x1="135" y1="162" x2="175" y2="162" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="145" y1="164" x2="183" y2="164" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <rect x="175" y="145" width="130" height="35" rx="6" fill="#dcfce7" stroke="#22c55e"/>
-  <text x="240" y="167" text-anchor="middle" font-size="10" fill="#166534">GET /oauth/start</text>
+  <rect x="185" y="148" width="130" height="32" rx="6" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="250" y="168" text-anchor="middle" font-size="10" fill="#166534">GET /oauth/start</text>
 
-  <line x1="305" y1="162" x2="345" y2="162" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="315" y1="164" x2="353" y2="164" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <!-- Step 3: Generate PKCE + state -->
-  <rect x="345" y="145" width="150" height="35" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
-  <text x="420" y="161" text-anchor="middle" font-size="10" fill="#92400e">Generate PKCE +</text>
-  <text x="420" y="173" text-anchor="middle" font-size="10" fill="#92400e">state nonce</text>
+  <rect x="355" y="148" width="150" height="32" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="430" y="168" text-anchor="middle" font-size="10" fill="#92400e">Generate PKCE + state</text>
 
-  <line x1="495" y1="162" x2="685" y2="190" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
+  <line x1="505" y1="164" x2="703" y2="164" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
 
-  <rect x="685" y="178" width="180" height="30" rx="6" fill="#fff7ed" stroke="#fb923c"/>
-  <text x="775" y="197" text-anchor="middle" font-size="10" fill="#c2410c">DDB: oauth-state (10min TTL)</text>
+  <rect x="705" y="148" width="180" height="32" rx="6" fill="#fff7ed" stroke="#fb923c"/>
+  <text x="795" y="168" text-anchor="middle" font-size="10" fill="#c2410c">DDB: oauth-state (TTL 10min)</text>
 
-  <!-- Step 4: Redirect to PF -->
-  <line x1="420" y1="180" x2="420" y2="215" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="430" y1="180" x2="430" y2="208" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <rect x="345" y="215" width="150" height="30" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
-  <text x="420" y="234" text-anchor="middle" font-size="10" fill="#92400e">302 → PF /authorize</text>
+  <rect x="355" y="210" width="150" height="32" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="430" y="230" text-anchor="middle" font-size="10" fill="#92400e">302 → EHR /authorize</text>
 
-  <line x1="495" y1="230" x2="535" y2="230" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="505" y1="226" x2="543" y2="226" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <!-- Step 5: PF consent -->
-  <rect x="535" y="215" width="110" height="45" rx="6" fill="#fce7f3" stroke="#ec4899"/>
-  <text x="590" y="234" text-anchor="middle" font-size="10" fill="#9d174d">Dr. Patel logs in</text>
-  <text x="590" y="248" text-anchor="middle" font-size="10" fill="#9d174d">Reviews scopes</text>
+  <rect x="545" y="210" width="120" height="48" rx="6" fill="#fce7f3" stroke="#ec4899"/>
+  <text x="605" y="230" text-anchor="middle" font-size="10" fill="#9d174d">Clinician logs in</text>
+  <text x="605" y="244" text-anchor="middle" font-size="10" fill="#9d174d">Reviews scopes</text>
 
-  <line x1="535" y1="245" x2="135" y2="270" stroke="#475569" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="545" y1="245" x2="145" y2="280" stroke="#475569" stroke-width="1" stroke-dasharray="3,3"/>
 
-  <rect x="35" y="260" width="100" height="30" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
-  <text x="85" y="279" text-anchor="middle" font-size="10" fill="#1e40af">Clicks "Allow"</text>
+  <rect x="35" y="270" width="110" height="32" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="90" y="290" text-anchor="middle" font-size="10" fill="#1e40af">Clicks "Allow"</text>
 
-  <!-- Step 6: Callback -->
-  <line x1="590" y1="260" x2="420" y2="310" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
-  <text x="510" y="278" font-size="9" fill="#64748b">?code=AUTH&amp;state=NONCE</text>
+  <line x1="605" y1="258" x2="430" y2="310" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <text x="530" y="280" font-size="9" fill="#64748b">?code=AUTH&amp;state=NONCE</text>
 
-  <rect x="345" y="305" width="150" height="30" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
-  <text x="420" y="324" text-anchor="middle" font-size="10" fill="#92400e">/oauth/callback</text>
+  <rect x="355" y="306" width="150" height="32" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="430" y="326" text-anchor="middle" font-size="10" fill="#92400e">/oauth/callback</text>
 
-  <!-- Step 7: Consume state + exchange -->
-  <line x1="420" y1="335" x2="420" y2="355" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="430" y1="338" x2="430" y2="358" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <rect x="345" y="355" width="150" height="30" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
-  <text x="420" y="374" text-anchor="middle" font-size="10" fill="#92400e">Consume state (atomic)</text>
+  <rect x="355" y="360" width="150" height="32" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="430" y="380" text-anchor="middle" font-size="10" fill="#92400e">Validate state (atomic)</text>
 
-  <line x1="495" y1="370" x2="685" y2="370" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
-  <rect x="685" y="355" width="180" height="30" rx="6" fill="#fff7ed" stroke="#fb923c"/>
-  <text x="775" y="374" text-anchor="middle" font-size="10" fill="#c2410c">DDB: delete oauth-state row</text>
+  <line x1="505" y1="376" x2="703" y2="376" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
+  <rect x="705" y="360" width="180" height="32" rx="6" fill="#fff7ed" stroke="#fb923c"/>
+  <text x="795" y="380" text-anchor="middle" font-size="10" fill="#c2410c">DDB: delete oauth-state row</text>
 
-  <!-- Step 8: Exchange code for tokens -->
-  <line x1="420" y1="385" x2="420" y2="405" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="430" y1="392" x2="430" y2="412" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <rect x="345" y="405" width="150" height="30" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
-  <text x="420" y="424" text-anchor="middle" font-size="10" fill="#92400e">POST /token (code→tokens)</text>
+  <rect x="355" y="414" width="150" height="32" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="430" y="434" text-anchor="middle" font-size="10" fill="#92400e">POST /token (code → tokens)</text>
 
-  <line x1="495" y1="420" x2="535" y2="420" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
-  <rect x="535" y="405" width="110" height="30" rx="6" fill="#fce7f3" stroke="#ec4899"/>
-  <text x="590" y="424" text-anchor="middle" font-size="10" fill="#9d174d">Returns tokens</text>
+  <line x1="505" y1="430" x2="543" y2="430" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <rect x="545" y="414" width="120" height="32" rx="6" fill="#fce7f3" stroke="#ec4899"/>
+  <text x="605" y="434" text-anchor="middle" font-size="10" fill="#9d174d">Returns tokens</text>
 
-  <!-- Step 9: Store everything -->
-  <line x1="420" y1="435" x2="420" y2="455" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
+  <line x1="430" y1="446" x2="430" y2="468" stroke="#475569" stroke-width="1" marker-end="url(#a)"/>
 
-  <rect x="345" y="455" width="150" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
-  <text x="420" y="471" text-anchor="middle" font-size="10" fill="#92400e">Store tokens + config</text>
-  <text x="420" y="483" text-anchor="middle" font-size="10" fill="#92400e">Claim DID</text>
+  <rect x="355" y="470" width="150" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="430" y="487" text-anchor="middle" font-size="10" fill="#92400e">Store tokens + config</text>
+  <text x="430" y="501" text-anchor="middle" font-size="10" fill="#92400e">Claim DID</text>
 
-  <line x1="495" y1="475" x2="685" y2="445" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
-  <rect x="685" y="395" width="180" height="55" rx="6" fill="#fff7ed" stroke="#fb923c"/>
-  <text x="775" y="412" text-anchor="middle" font-size="10" fill="#c2410c">DDB: oauth-tokens (KMS)</text>
-  <text x="775" y="426" text-anchor="middle" font-size="10" fill="#c2410c">DDB: practices</text>
-  <text x="775" y="440" text-anchor="middle" font-size="10" fill="#c2410c">DDB: phone_routing</text>
+  <line x1="505" y1="480" x2="703" y2="430" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
+  <rect x="705" y="410" width="180" height="48" rx="6" fill="#fff7ed" stroke="#fb923c"/>
+  <text x="795" y="428" text-anchor="middle" font-size="10" fill="#c2410c">DDB: oauth-tokens (KMS)</text>
+  <text x="795" y="442" text-anchor="middle" font-size="10" fill="#c2410c">DDB: practices + phone_routing</text>
 
-  <line x1="495" y1="480" x2="685" y2="480" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
-  <rect x="685" y="465" width="180" height="30" rx="6" fill="#fff7ed" stroke="#fb923c"/>
-  <text x="775" y="484" text-anchor="middle" font-size="10" fill="#c2410c">Connect: ClaimPhoneNumber</text>
+  <line x1="505" y1="495" x2="703" y2="495" stroke="#475569" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#a)"/>
+  <rect x="705" y="480" width="180" height="32" rx="6" fill="#fff7ed" stroke="#fb923c"/>
+  <text x="795" y="500" text-anchor="middle" font-size="10" fill="#c2410c">Connect: ClaimPhoneNumber</text>
 
-  <!-- Step 10: Success -->
-  <line x1="345" y1="475" x2="240" y2="510" stroke="#16a34a" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="355" y1="495" x2="250" y2="530" stroke="#16a34a" stroke-width="1.5" marker-end="url(#a-green)"/>
 
-  <rect x="170" y="505" width="140" height="30" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
-  <text x="240" y="524" text-anchor="middle" font-weight="600" font-size="10" fill="#166534">"Connected! DID: 480-555-0147"</text>
+  <rect x="180" y="525" width="140" height="30" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="250" y="544" text-anchor="middle" font-weight="600" font-size="10" fill="#166534">"Connected! Your DID is ready"</text>
 
-  <line x1="170" y1="520" x2="85" y2="520" stroke="#16a34a" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="180" y1="540" x2="145" y2="540" stroke="#16a34a" stroke-width="1.5" marker-end="url(#a-green)"/>
 
-  <rect x="30" y="505" width="110" height="30" rx="12" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
-  <text x="85" y="524" text-anchor="middle" font-weight="700" font-size="10" fill="#166534">READY ✓</text>
+  <rect x="30" y="525" width="110" height="30" rx="12" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
+  <text x="85" y="544" text-anchor="middle" font-weight="700" font-size="10" fill="#166534">READY ✓</text>
 </svg>

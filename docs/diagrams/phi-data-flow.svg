@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="Inter, -apple-system, sans-serif" font-size="12">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" font-family="Inter, -apple-system, sans-serif" font-size="12">
   <defs>
     <marker id="ar" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#475569"/>
@@ -6,103 +6,97 @@
     <marker id="ar-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#dc2626"/>
     </marker>
+    <marker id="ar-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#16a34a"/>
+    </marker>
   </defs>
 
-  <rect width="900" height="480" fill="#f8fafc" rx="8"/>
-  <text x="450" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">PHI Data Flow — Where Patient Data Lives and Never Lives</text>
-  <text x="450" y="45" text-anchor="middle" font-size="11" fill="#64748b">Every red zone is encrypted at rest + audited. Every gray zone never sees PHI values.</text>
+  <rect width="920" height="520" fill="#f8fafc" rx="8"/>
+  <text x="460" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">PHI Data Flow — Where Patient Data Lives and Never Lives</text>
+  <text x="460" y="46" text-anchor="middle" font-size="11" fill="#64748b">Red zones are encrypted at rest + audited. Gray zones never see PHI values.</text>
 
-  <!-- Caller -->
-  <rect x="30" y="70" width="120" height="55" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="90" y="92" text-anchor="middle" font-weight="600" fill="#1e40af">Caller</text>
-  <text x="90" y="107" text-anchor="middle" font-size="10" fill="#3b82f6">Speaks: name,</text>
-  <text x="90" y="119" text-anchor="middle" font-size="10" fill="#3b82f6">DOB, reason</text>
 
-  <!-- Nova Sonic -->
-  <rect x="190" y="70" width="140" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
-  <text x="260" y="90" text-anchor="middle" font-weight="600" fill="#5b21b6">Nova 2 Sonic</text>
-  <text x="260" y="105" text-anchor="middle" font-size="10" fill="#7c3aed">Speech → text slots</text>
-  <text x="260" y="118" text-anchor="middle" font-size="10" fill="#94a3b8">Transient only</text>
+  <rect x="30" y="80" width="120" height="55" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="90" y="100" text-anchor="middle" font-weight="600" fill="#1e40af">Caller</text>
+  <text x="90" y="116" text-anchor="middle" font-size="10" fill="#3b82f6">Speaks: name,</text>
+  <text x="90" y="128" text-anchor="middle" font-size="10" fill="#3b82f6">DOB, reason</text>
 
-  <line x1="150" y1="97" x2="190" y2="97" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
-  <text x="170" y="90" font-size="9" fill="#64748b">audio</text>
+  <line x1="150" y1="107" x2="188" y2="107" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
+  <text x="169" y="99" font-size="9" fill="#64748b">audio</text>
 
-  <!-- Code-hook -->
-  <rect x="370" y="70" width="140" height="55" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="440" y="90" text-anchor="middle" font-weight="600" fill="#92400e">Code-Hook</text>
-  <text x="440" y="105" text-anchor="middle" font-size="10" fill="#a16207">Lambda (memory)</text>
-  <text x="440" y="118" text-anchor="middle" font-size="10" fill="#94a3b8">Transient only</text>
+  <rect x="190" y="80" width="130" height="55" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="255" y="100" text-anchor="middle" font-weight="600" fill="#5b21b6">Nova 2 Sonic</text>
+  <text x="255" y="116" text-anchor="middle" font-size="10" fill="#7c3aed">Speech ↔ text</text>
+  <text x="255" y="128" text-anchor="middle" font-size="10" fill="#94a3b8">Transient only</text>
 
-  <line x1="330" y1="97" x2="370" y2="97" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
-  <text x="350" y="90" font-size="9" fill="#64748b">slots</text>
+  <line x1="320" y1="107" x2="358" y2="107" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
+  <text x="339" y="99" font-size="9" fill="#64748b">text</text>
 
-  <!-- lookup_patient -->
-  <rect x="550" y="70" width="140" height="55" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="620" y="90" text-anchor="middle" font-weight="600" fill="#92400e">lookup_patient</text>
-  <text x="620" y="105" text-anchor="middle" font-size="10" fill="#a16207">Lambda (memory)</text>
-  <text x="620" y="118" text-anchor="middle" font-size="10" fill="#94a3b8">Transient only</text>
+  <rect x="360" y="80" width="150" height="55" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="435" y="100" text-anchor="middle" font-weight="600" fill="#92400e">Code-Hook + Claude</text>
+  <text x="435" y="116" text-anchor="middle" font-size="10" fill="#a16207">Reasoning + tool calls</text>
+  <text x="435" y="128" text-anchor="middle" font-size="10" fill="#94a3b8">Transient only</text>
 
-  <line x1="510" y1="97" x2="550" y2="97" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
-  <text x="530" y="90" font-size="9" fill="#64748b">params</text>
+  <line x1="510" y1="107" x2="548" y2="107" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
+  <text x="529" y="99" font-size="9" fill="#64748b">params</text>
 
-  <!-- PF FHIR -->
-  <rect x="730" y="70" width="140" height="55" rx="8" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
-  <text x="800" y="90" text-anchor="middle" font-weight="600" fill="#9d174d">PF FHIR R4</text>
-  <text x="800" y="105" text-anchor="middle" font-size="10" fill="#be185d">Patient resource</text>
-  <text x="800" y="118" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="600">PHI SOURCE</text>
+  <rect x="550" y="80" width="140" height="55" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="620" y="100" text-anchor="middle" font-weight="600" fill="#92400e">lookup_patient</text>
+  <text x="620" y="116" text-anchor="middle" font-size="10" fill="#a16207">FHIR search</text>
+  <text x="620" y="128" text-anchor="middle" font-size="10" fill="#94a3b8">Transient only</text>
 
-  <line x1="690" y1="97" x2="730" y2="97" stroke="#dc2626" stroke-width="1.5" marker-end="url(#ar-red)"/>
-  <text x="710" y="90" font-size="9" fill="#dc2626">FHIR</text>
+  <line x1="690" y1="107" x2="738" y2="107" stroke="#dc2626" stroke-width="1.5" marker-end="url(#ar-red)"/>
+  <text x="714" y="99" font-size="9" fill="#dc2626">FHIR</text>
 
-  <!-- PHI ZONE label -->
-  <rect x="540" y="55" width="340" height="80" rx="10" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,3"/>
-  <text x="710" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626">PHI IN MEMORY (never persisted)</text>
+  <rect x="740" y="80" width="150" height="55" rx="8" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
+  <text x="815" y="100" text-anchor="middle" font-weight="600" fill="#9d174d">EHR FHIR R4</text>
+  <text x="815" y="116" text-anchor="middle" font-size="10" fill="#be185d">Patient resource</text>
+  <text x="815" y="128" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="600">PHI SOURCE</text>
 
-  <!-- What gets returned to code-hook -->
-  <rect x="370" y="160" width="320" height="60" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
-  <text x="530" y="178" text-anchor="middle" font-weight="600" fill="#166534">Returned to Code-Hook (safe projection)</text>
-  <text x="530" y="195" text-anchor="middle" font-size="10" fill="#047857">name: "James Wilson" · dob: "1982-03-15" · phone_masked: "+1***5550199"</text>
-  <text x="530" y="210" text-anchor="middle" font-size="10" fill="#047857">NO: full phone, SSN, address, insurance, clinical data</text>
+  <rect x="540" y="62" width="360" height="82" rx="10" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="720" y="58" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626">PHI IN MEMORY (never persisted unencrypted)</text>
 
-  <line x1="620" y1="125" x2="530" y2="160" stroke="#16a34a" stroke-width="1.5" marker-end="url(#ar)"/>
 
-  <!-- What gets spoken to caller -->
-  <rect x="30" y="160" width="300" height="50" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="180" y="178" text-anchor="middle" font-weight="600" fill="#1e40af">Spoken to Caller (by Nova Sonic)</text>
-  <text x="180" y="195" text-anchor="middle" font-size="10" fill="#3b82f6">"I've verified your identity, James." — first name only, never last</text>
+  <rect x="340" y="170" width="350" height="55" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="515" y="190" text-anchor="middle" font-weight="600" fill="#166534">Returned to Code-Hook (safe projection)</text>
+  <text x="515" y="206" text-anchor="middle" font-size="10" fill="#047857">name · dob · phone_masked: "+1***5550199"</text>
+  <text x="515" y="218" text-anchor="middle" font-size="10" fill="#047857">NO: full phone, SSN, address, insurance, clinical data</text>
 
-  <line x1="370" y1="185" x2="330" y2="185" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
+  <line x1="620" y1="135" x2="515" y2="168" stroke="#16a34a" stroke-width="1.5" marker-end="url(#ar-green)"/>
 
-  <!-- PERSISTED DATA -->
-  <text x="450" y="250" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">What Gets Persisted</text>
+  <rect x="30" y="170" width="290" height="44" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="175" y="188" text-anchor="middle" font-weight="600" fill="#1e40af">Spoken to Caller (Nova Sonic)</text>
+  <text x="175" y="204" text-anchor="middle" font-size="10" fill="#3b82f6">"I've verified your identity, James." — first name only</text>
 
-  <!-- Audit log -->
-  <rect x="30" y="270" width="250" height="90" rx="8" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
-  <text x="155" y="290" text-anchor="middle" font-weight="700" fill="#991b1b">S3 Audit Bucket (Object Lock)</text>
-  <text x="155" y="308" text-anchor="middle" font-size="10" fill="#dc2626">practice_id: "sunshine-001"</text>
-  <text x="155" y="322" text-anchor="middle" font-size="10" fill="#dc2626">call_id: "abc-123"</text>
-  <text x="155" y="336" text-anchor="middle" font-size="10" fill="#dc2626">patient_resource_id: "Patient/12345"</text>
-  <text x="155" y="350" text-anchor="middle" font-size="10" fill="#dc2626">disclosed_fields: ["name", "dob", "phone_masked"]</text>
+  <line x1="340" y1="192" x2="322" y2="192" stroke="#475569" stroke-width="1" marker-end="url(#ar)"/>
 
-  <!-- Calls table -->
-  <rect x="320" y="270" width="250" height="90" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="445" y="290" text-anchor="middle" font-weight="700" fill="#92400e">DDB: calls table</text>
-  <text x="445" y="308" text-anchor="middle" font-size="10" fill="#a16207">practice_id: "sunshine-001"</text>
-  <text x="445" y="322" text-anchor="middle" font-size="10" fill="#a16207">call_id: "abc-123"</text>
-  <text x="445" y="336" text-anchor="middle" font-size="10" fill="#a16207">verification_outcome: "verified"</text>
-  <text x="445" y="350" text-anchor="middle" font-size="10" fill="#a16207">caller_phone_masked: "+1***5550199"</text>
+  <text x="460" y="260" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">What Gets Persisted</text>
 
-  <!-- CloudWatch -->
-  <rect x="610" y="270" width="250" height="90" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
-  <text x="735" y="290" text-anchor="middle" font-weight="700" fill="#475569">CloudWatch Logs</text>
-  <text x="735" y="308" text-anchor="middle" font-size="10" fill="#64748b">practice_id: "sunshine-001"</text>
-  <text x="735" y="322" text-anchor="middle" font-size="10" fill="#64748b">call_id: "abc-123"</text>
-  <text x="735" y="336" text-anchor="middle" font-size="10" fill="#64748b">tool: "lookup_patient"</text>
-  <text x="735" y="350" text-anchor="middle" font-size="10" fill="#64748b">decision: "single_match"</text>
+  <rect x="30" y="280" width="260" height="88" rx="8" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+  <text x="160" y="300" text-anchor="middle" font-weight="700" fill="#991b1b">S3 Audit Bucket (Object Lock)</text>
+  <text x="160" y="318" text-anchor="middle" font-size="10" fill="#dc2626">practice_id, call_id</text>
+  <text x="160" y="332" text-anchor="middle" font-size="10" fill="#dc2626">patient_resource_id: "Patient/12345"</text>
+  <text x="160" y="346" text-anchor="middle" font-size="10" fill="#dc2626">disclosed_fields: ["name", "dob"]</text>
+  <text x="160" y="360" text-anchor="middle" font-size="10" fill="#dc2626">KMS-encrypted · 7-year retention</text>
 
-  <!-- NEVER persisted -->
-  <rect x="30" y="390" width="830" height="70" rx="8" fill="#fff" stroke="#ef4444" stroke-width="2"/>
-  <text x="450" y="412" text-anchor="middle" font-weight="700" font-size="14" fill="#dc2626">NEVER PERSISTED — ANYWHERE</text>
-  <text x="450" y="432" text-anchor="middle" font-size="11" fill="#991b1b">Patient name values · Date of birth values · Full phone numbers · SSN</text>
-  <text x="450" y="448" text-anchor="middle" font-size="11" fill="#991b1b">Address · Insurance details · Clinical data · FHIR resource content · Slot transcripts</text>
+  <rect x="330" y="280" width="260" height="88" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="460" y="300" text-anchor="middle" font-weight="700" fill="#92400e">DDB: calls table</text>
+  <text x="460" y="318" text-anchor="middle" font-size="10" fill="#a16207">practice_id, call_id</text>
+  <text x="460" y="332" text-anchor="middle" font-size="10" fill="#a16207">verification_outcome: "verified"</text>
+  <text x="460" y="346" text-anchor="middle" font-size="10" fill="#a16207">caller_phone_masked: "+1***5550199"</text>
+  <text x="460" y="360" text-anchor="middle" font-size="10" fill="#a16207">KMS-encrypted (phi-key)</text>
+
+  <rect x="630" y="280" width="260" height="88" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="760" y="300" text-anchor="middle" font-weight="700" fill="#475569">CloudWatch Logs</text>
+  <text x="760" y="318" text-anchor="middle" font-size="10" fill="#64748b">practice_id, call_id</text>
+  <text x="760" y="332" text-anchor="middle" font-size="10" fill="#64748b">tool: "lookup_patient"</text>
+  <text x="760" y="346" text-anchor="middle" font-size="10" fill="#64748b">decision: "single_match"</text>
+  <text x="760" y="360" text-anchor="middle" font-size="10" fill="#64748b" font-weight="600">NO PHI VALUES — ever</text>
+
+  <rect x="30" y="400" width="860" height="60" rx="8" fill="#fff" stroke="#ef4444" stroke-width="2"/>
+  <text x="460" y="422" text-anchor="middle" font-weight="700" font-size="14" fill="#dc2626">NEVER PERSISTED — ANYWHERE</text>
+  <text x="460" y="442" text-anchor="middle" font-size="11" fill="#991b1b">Patient name values · Date of birth · Full phone numbers · SSN · Address · Insurance</text>
+  <text x="460" y="456" text-anchor="middle" font-size="11" fill="#991b1b">Clinical data · FHIR resource bodies · Conversation transcripts</text>
+
+  <text x="460" y="500" text-anchor="middle" font-size="10" fill="#94a3b8">PHI flows through Lambda memory only. It is never written to disk, logs, or unencrypted storage.</text>
 </svg>
