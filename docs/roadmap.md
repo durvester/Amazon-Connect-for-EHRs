@@ -823,6 +823,35 @@ DID claiming rate-limited at ~1-2 RPS. Strategies:
 - SQS queue + Lambda consumer for async DID claiming
 - Pre-reserve DID pool for instant assignment on signup
 
+### Conversation Analytics Pipeline
+
+Inspired by the [AWS contact center RAG solution](https://aws.amazon.com/blogs/machine-learning/deploy-generative-ai-agents-in-your-contact-center-for-voice-and-chat-using-amazon-connect-amazon-lex-and-amazon-bedrock-knowledge-bases/).
+
+CloudWatch Logs → Amazon Data Firehose → S3 data lake → AWS Glue crawler → Amazon Athena.
+Optional PII redaction via Amazon Comprehend in the Firehose transformation Lambda.
+Amazon QuickSight dashboards for per-practice call volume, verification success rate,
+escalation reasons, p95 turn latency, and tool usage patterns.
+
+This replaces ad-hoc CloudWatch Logs Insights queries with a queryable, dashboardable data layer.
+
+### Lambda Provisioned Concurrency
+
+Add `provisionedConcurrency` to EnvConfig (0 for QA, configurable for prod).
+Apply to the code-hook Lambda only (the latency-sensitive path).
+A cold start adds 1-2 seconds to the first turn on a voice call; provisioned
+concurrency eliminates this. The router Lambda is fast enough (<5ms) that cold
+starts are negligible.
+
+### Async Verification Confidence Check
+
+After each call, the code-hook Lambda publishes a message to an SQS queue with
+the call evidence: phone match result, DOB confirmation, patient resource ID,
+tool calls made, and verification outcome. A second Lambda consumes the queue,
+re-evaluates the evidence against the verification rules, and logs the result
+to the audit bucket. This is adapted from the hallucination detection pattern
+in the AWS contact center RAG solution but applied to verification correctness
+rather than generated-text factuality.
+
 ### Implementation Priority
 
 | Session | What | JTBD |
@@ -834,3 +863,6 @@ DID claiming rate-limited at ~1-2 RPS. Strategies:
 | 0022 | Number porting flow | S2 |
 | 0023 | Billing integration (Stripe subscription) | Monetization |
 | 0024 | Bulk onboarding (SQS queue + DID pool) | Scale |
+| 0025 | Conversation analytics pipeline (Firehose → Glue → Athena → QuickSight) | S3, Ops |
+| 0026 | Lambda provisioned concurrency (code-hook) | Perf |
+| 0027 | Async verification confidence check (SQS → Lambda → audit) | Compliance |
