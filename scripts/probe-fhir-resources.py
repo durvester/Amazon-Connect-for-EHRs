@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
-"""Probe PF FHIR for clinical resources of a known patient.
+"""Probe a FHIR server for clinical resources of a known patient.
 
 Uses the same credential chain as the live Lambda (DDB + KMS).
+
+Required env vars:
+  PF_ORG_UUID          Practice/org identifier
+  PATIENT_ID           FHIR Patient resource ID to probe
+  PRACTICES_TABLE_NAME DynamoDB practices table
+  TOKENS_TABLE_NAME    DynamoDB OAuth tokens table
+  OAUTH_KMS_KEY_ARN    KMS key ARN for token decryption
 
 Usage: .venv/bin/python scripts/probe-fhir-resources.py
 """
@@ -20,14 +27,17 @@ for pkg in ("oauth/src", "tools/lookup_patient/src", "tools/fhir_query/src", "au
 import requests
 
 os.environ.setdefault("AWS_REGION", "us-east-1")
-os.environ.setdefault("PRACTICES_TABLE_NAME", "pf-voice-qa-practices")
-os.environ.setdefault("TOKENS_TABLE_NAME", "pf-voice-qa-oauth-tokens")
-os.environ.setdefault("OAUTH_KMS_KEY_ARN", "alias/pf-voice-qa-oauth-key")
 
 from oauth.credentials import get_credentials
 
-PRACTICE_ID = os.environ.get("PF_ORG_UUID", "b4ab304f-d1ac-4565-8dca-992b589422a7")
-PATIENT_ID = os.environ.get("PATIENT_ID", "b79082d9-548c-454e-9fc7-ce19ab630776")
+PRACTICE_ID = os.environ.get("PF_ORG_UUID")
+PATIENT_ID = os.environ.get("PATIENT_ID")
+
+if not PRACTICE_ID or not PATIENT_ID:
+    print("Error: PF_ORG_UUID and PATIENT_ID env vars are required.")
+    print("  export PF_ORG_UUID=<your-practice-uuid>")
+    print("  export PATIENT_ID=<fhir-patient-id>")
+    sys.exit(1)
 
 RESOURCES = [
     ("DiagnosticReport", {"patient": PATIENT_ID, "_count": "5"}),
@@ -86,7 +96,7 @@ def main():
             print(f"Error: {result['body'][:300]}")
         print()
 
-    out = REPO / "docs" / "research" / "pf-clinical-probe.json"
+    out = REPO / "probe-results.json"
     with open(out, "w") as f:
         json.dump(results, f, indent=2, default=str)
     print(f"\nFull results saved to {out}")

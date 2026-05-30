@@ -71,7 +71,7 @@ export interface EnvConfig {
 }
 
 export const envs: Record<EnvName, EnvConfig> = {
-  qa:      { envName: "qa",      account: "086514900943", region: "us-east-1",
+  qa:      { envName: "qa",      account: "000000000000", region: "us-east-1",
              logRetentionDays: 7,   removalPolicy: "DESTROY",
              ratelimitDefaultPerDay: 100,
              tablePrefix: "pf-voice-qa",   bucketPrefix: "pf-voice-qa",
@@ -187,7 +187,7 @@ Lambdas read tokens from DDB (KMS-encrypted under
 ## Open questions
 
 - Single deploy account vs. per-env accounts? Currently `qa` lives in
-  `086514900943` (per CLAUDE.md). Staging and prod accounts TBD —
+  `000000000000` (per CLAUDE.md). Staging and prod accounts TBD —
   decision lands when those accounts are requested. The structure
   here doesn't require any change either way.
 - Region failover? v1 is single-region (`us-east-1`). When we add a

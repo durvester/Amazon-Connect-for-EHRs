@@ -19,7 +19,7 @@ export interface EnvConfig {
 export const envs: Record<EnvName, EnvConfig> = {
   qa: {
     envName: "qa",
-    account: "086514900943",
+    account: "000000000000",
     region: "us-east-1",
     logRetentionDays: 7,
     removalPolicy: "DESTROY",

@@ -2,11 +2,9 @@
 
 This document is the **current** target architecture. If you change the architecture, write a new ADR in `decisions/` and update this file in the same commit.
 
-> **Session 0011 final (2026-05-24).** ADR-0019 + ADR-0020. The code-hook
-> Lambda calls Claude via Bedrock InvokeModel every turn — it's an LLM-
-> powered agent, not an IVR. Lex is speech I/O (Nova 2 Sonic) + turn-
-> taking plumbing. `pf_org_uuid` is the practice identity key everywhere
-> (ADR-0020). Supersedes the rigid-slot design from earlier in Session 0011.
+> The code-hook Lambda calls Claude via Bedrock InvokeModel every turn — it's
+> an LLM-powered agent, not an IVR. Lex is speech I/O (Nova 2 Sonic) + turn-
+> taking plumbing. `pf_org_uuid` is the practice identity key everywhere.
 
 ## The call flow
 
@@ -83,10 +81,10 @@ The key handoffs:
 | Tool: `document_status` (future) | Python Lambda + `tool_schema.json` | DocumentReference status query |
 | Practice config | DynamoDB table `practices` | `practice_id → {fhir_base_url, token_endpoint, pf_client_id, pf_client_secret_arn}` |
 | OAuth tokens | DynamoDB table `oauth-tokens` | KMS-encrypted access + refresh tokens, one row per practice |
-| OAuth state cache | DynamoDB table `oauth-state` (TTL-evicted; ADR-0016) | Single-use PKCE/state row between `/oauth/start` and `/oauth/callback` |
-| Secrets | AWS Secrets Manager | One PF Provider App `client_secret` per env (ADR-0016) |
+| OAuth state cache | DynamoDB table `oauth-state` (TTL-evicted) | Single-use PKCE/state row between `/oauth/start` and `/oauth/callback` |
+| Secrets | AWS Secrets Manager | One PF Provider App `client_secret` per env |
 | Per-(practice, ANI) rate-limit | DynamoDB table `rate-limit` (TTL-evicted) | Daily call budget per (practice, ANI) |
-| OAuth onboarding API | Python FastAPI on Lambda + Function URL (ADR-0015) | `/oauth/start`, `/oauth/callback`; on success, claims a Connect DID + writes the `practices` / `oauth-tokens` / `phone_routing` rows in one shot |
+| OAuth onboarding API | Python FastAPI on Lambda + Function URL | `/oauth/start`, `/oauth/callback`; on success, claims a Connect DID + writes the `practices` / `oauth-tokens` / `phone_routing` rows in one shot |
 | Practice API (later) | Python FastAPI on Lambda + API Gateway | Backend for the dashboard |
 | Practice dashboard (later) | React + Vite + TypeScript | Hosted on CloudFront + S3 |
 | Auth (dashboard) | Amazon Cognito | One user per practice-staff member |
@@ -181,7 +179,7 @@ unattended (phone-time) reads. No pivot to Backend Services needed.
 
 ## Security model
 
-- **HIPAA-eligible services only.** Every service in the stack is on the AWS HIPAA-eligible list. Verify BAA covers account `086514900943` via AWS Artifact before any PHI flows.
+- **HIPAA-eligible services only.** Every service in the stack is on the AWS HIPAA-eligible list. Verify BAA covers your account via AWS Artifact before any PHI flows.
 - **Customer-managed KMS keys for PHI.** Two CMKs:
   - `phi-key` — used for S3 (transcripts, audio, audit log), DynamoDB `calls` table
   - `oauth-key` — used for the OAuth-token storage and envelope-encryption of refresh tokens
@@ -210,8 +208,6 @@ unattended (phone-time) reads. No pivot to Backend Services needed.
 Session 0011 research discovered `AMAZON.BedrockAgentIntent` — a Lex
 built-in intent that delegates conversation to a Bedrock Agent. This
 could replace the code-hook Lambda with a Bedrock Agent that natively
-handles multi-turn dialog and tool calling. Documented in
-`docs/architecture-jtbd.md` as Path B. Not chosen for v1 because:
+handles multi-turn dialog and tool calling. Not chosen for v1 because
 compatibility with Nova Sonic `UnifiedSpeechSettings` is unverified, and
-the code-hook path is the safer bet. If code-hook rigidity becomes a
-problem (ADR-0018 kill criterion), Path B is the fallback.
+the code-hook path is the safer bet.

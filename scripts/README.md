@@ -1,8 +1,5 @@
 # scripts/
 
-One-off CLI tools and spikes used during development. Not deployed.
+Developer utilities for exploring and testing FHIR integrations. Not deployed.
 
-- `spike-fhir.py` — Session 0002 spike: complete OAuth + retrieve a Patient from PF
-- `seed-test-practice.py` — Session 0007: insert a row into the `practices` DDB table
-
-Both are placeholders today.
+- `probe-fhir-resources.py` — Probe a FHIR server for clinical resources of a known patient. Uses the same credential chain (DDB + KMS) as the live Lambdas. Requires `PF_ORG_UUID` and `PATIENT_ID` env vars.

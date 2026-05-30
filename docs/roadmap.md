@@ -1,18 +1,15 @@
 # Roadmap
 
-> **Updated Session 0017 (2026-05-27).** Codebase cleanup complete. All dead
-> code from Strands/AgentCore/POC pivots removed. Architecture settled on
-> Lex + Nova Sonic + code-hook Lambda calling Claude (ADR-0018/0019).
+> Codebase cleanup complete. Architecture settled on
+> Lex + Nova Sonic + code-hook Lambda calling Claude (ADR-0019).
 > Forward plan below focuses on multi-practice scale-out.
 >
-> Sessions 0001-0016 are history (see `docs/sessions/`). The session-level
-> plans below from 0004-0016 are historical — they describe earlier
+> Sessions 0001-0016 are historical — they describe earlier
 > directions that evolved during implementation. The **current forward
 > plan starts at Session 0018** at the bottom of this file.
 
-This is the forward-looking master plan. Per-session logs in `docs/sessions/`
-remain the authoritative backward record; this file describes what is *next*
-and *why in this order*.
+This is the forward-looking master plan. Session numbers below refer to
+development milestones; this file describes what is *next* and *why in this order*.
 
 Sessions 0001–0003 are history (see their session logs). The original Session
 0003 log queued "Strands agent skeleton" as Session 0004. **This roadmap

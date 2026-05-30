@@ -40,11 +40,6 @@ cdk.context.json
 *.pem
 *.key
 secrets/
-# Sealed-box ciphertext + public key ARE meant to be committed — only the
-# private key (in env var PF_DEV_FIXTURE_PRIVKEY / Actions secret) can
-# decrypt. See scripts/seed-dev-refresh-token.py.
-!secrets/pf-qa-refresh-token.enc
-!secrets/dev-fixture-pubkey.b64
 
 # AWS / sessions
 .aws-sam/

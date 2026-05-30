@@ -11,14 +11,14 @@ function buildStack(): cdk.Stack {
     envConfig: envs.qa,
     practicesTableName: "pf-voice-qa-practices",
     tokensTableName: "pf-voice-qa-oauth-tokens",
-    oauthKmsKeyArn: "arn:aws:kms:us-east-1:086514900943:key/test-key-id",
+    oauthKmsKeyArn: "arn:aws:kms:us-east-1:000000000000:key/test-key-id",
     auditBucketName: "pf-voice-qa-audit",
     rateLimitTableName: "pf-voice-qa-rate-limit",
-    practicesTableArn: "arn:aws:dynamodb:us-east-1:086514900943:table/pf-voice-qa-practices",
-    tokensTableArn: "arn:aws:dynamodb:us-east-1:086514900943:table/pf-voice-qa-oauth-tokens",
+    practicesTableArn: "arn:aws:dynamodb:us-east-1:000000000000:table/pf-voice-qa-practices",
+    tokensTableArn: "arn:aws:dynamodb:us-east-1:000000000000:table/pf-voice-qa-oauth-tokens",
     auditBucketArn: "arn:aws:s3:::pf-voice-qa-audit",
-    auditKmsKeyArn: "arn:aws:kms:us-east-1:086514900943:key/test-audit-key-id",
-    rateLimitTableArn: "arn:aws:dynamodb:us-east-1:086514900943:table/pf-voice-qa-rate-limit",
+    auditKmsKeyArn: "arn:aws:kms:us-east-1:000000000000:key/test-audit-key-id",
+    rateLimitTableArn: "arn:aws:dynamodb:us-east-1:000000000000:table/pf-voice-qa-rate-limit",
   });
 }
 

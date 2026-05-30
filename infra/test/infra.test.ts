@@ -15,7 +15,7 @@ describe("CDK app", () => {
 describe("envs config", () => {
   it("loads qa", () => {
     const cfg = loadEnv("qa");
-    expect(cfg.account).toBe("086514900943");
+    expect(cfg.account).toBe("000000000000");
     expect(cfg.resourcePrefix).toBe("pf-voice-qa");
   });
 

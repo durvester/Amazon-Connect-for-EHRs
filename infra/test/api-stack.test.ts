@@ -7,9 +7,9 @@ import { envs } from "../config/envs";
 import { ApiStack } from "../lib/api-stack";
 
 const PF_CLIENT_SECRET_ARN =
-  "arn:aws:secretsmanager:us-east-1:086514900943:secret:pf-voice-qa-pf-client-secret";
+  "arn:aws:secretsmanager:us-east-1:000000000000:secret:pf-voice-qa-pf-client-secret";
 const INSTANCE_ID = "11111111-2222-3333-4444-555555555555";
-const INSTANCE_ARN = `arn:aws:connect:us-east-1:086514900943:instance/${INSTANCE_ID}`;
+const INSTANCE_ARN = `arn:aws:connect:us-east-1:000000000000:instance/${INSTANCE_ID}`;
 
 function build() {
   const app = new cdk.App();
@@ -27,7 +27,7 @@ function build() {
   );
   const oauthKmsKey = kms.Key.fromKeyArn(
     fixtureStack, "OAuthKey",
-    "arn:aws:kms:us-east-1:086514900943:key/test-key-id",
+    "arn:aws:kms:us-east-1:000000000000:key/test-key-id",
   );
 
   const stack = new ApiStack(app, "pf-voice-qa-api", {

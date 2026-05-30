@@ -28,7 +28,7 @@ Terms that come up frequently in this codebase. When in doubt, link to this file
 ## AWS
 
 - **Amazon Connect** — AWS's cloud contact center; handles telephony, contact flows, queues.
-- **Amazon Connect Health** — A separate AWS service (note the "Health"); not what we're using here. See ADR-0001.
+- **Amazon Connect Health** — A separate AWS service (note the "Health"); not what we're using here. That service is hard-wired to Epic FHIR APIs.
 - **Bedrock** — AWS's managed LLM service. Hosts Anthropic Claude, AWS Nova, and other foundation models.
 - **Nova Sonic** — AWS's speech-to-speech foundation model. Configured on Lex V2 bot locale via `UnifiedSpeechSettings`. We use Nova 2 Sonic (v1 is EOL Sep 2026).
 - **Lex V2** — AWS's conversational AI service. In this project, Lex handles speech I/O (via Nova Sonic) and turn-taking. A single FallbackIntent routes every utterance to our code-hook Lambda.
@@ -39,9 +39,8 @@ Terms that come up frequently in this codebase. When in doubt, link to this file
 
 ## Project-specific
 
-- **Tool** — A function the code-hook Lambda can invoke on Claude's behalf. Current tools: `lookup_patient`, `complete_verification` (inline), `fhir_query`, `escalate_to_human`.
+- **Tool** — A function the code-hook Lambda can invoke on Claude's behalf. Current tools: `lookup_patient`, `fhir_query`, `escalate_to_human` (inline).
 - **Code-hook Lambda** — The Lex fulfillment Lambda that IS the agent brain. Calls Claude via Bedrock InvokeModel every turn, dispatches tool calls, manages conversation history (ADR-0019).
-- **`pf_org_uuid`** — Practice Fusion's org UUID; the practice identity key throughout the system (ADR-0020). Extracted from the FHIR base URL.
+- **`pf_org_uuid`** — Practice Fusion's org UUID; the practice identity key throughout the system. Extracted from the FHIR base URL.
 - **Practice** — A single medical practice tenant; the unit of multi-tenancy in this system.
-- **Session** — A discrete period of work by one engineer (or Claude instance) on this repo. Each session ends with a handoff doc in `docs/sessions/`.
 - **Pilot** — The first practice live with the system. v1's deliverable.

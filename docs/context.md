@@ -14,15 +14,14 @@ Automating verification specifically (not the whole call) gives the biggest near
 
 ## Decisions that shaped the architecture
 
-| Date | Decision | Why | Where to read more |
-|---|---|---|---|
-| 2026-05-22 | **Not Amazon Connect Health** | Public AWS docs hard-wire the Patient Verification agent to Epic FHIR APIs; no public knob for non-Epic FHIR servers. | [ADR-0001](decisions/0001-bedrock-agentcore-over-lex.md) |
-| 2026-05-22 | ~~Not Amazon Lex~~ → **Lex V2 with Nova 2 Sonic** | Session 0010 discovered the "Connect native AI agent" doesn't exist for voice. Lex + Nova Sonic is the actual voice surface. | [ADR-0018](decisions/0018-lex-orchestrates-nova-sonic-and-agentcore.md) |
-| 2026-05-22 | **Amazon Nova 2 Sonic for speech-to-speech** | Configured on Lex bot locale via `UnifiedSpeechSettings`. Nova Sonic v1 is legacy (EOL Sep 2026); using v2. | [ADR-0002](decisions/0002-nova-sonic-over-transcribe-polly.md) |
-| 2026-05-23 | **SMART-on-FHIR Provider App (authorization_code + PKCE, user scopes)** | Practices grant access once via clinician sign-in; validated that user-scope refresh tokens work for unattended reads (ADR-0007). | [ADR-0003](decisions/0003-smart-provider-app-not-backend-services.md) |
-| 2026-05-23 | ~~Python + Strands Agents SDK~~ → **Lambda code-hook** | Strands/AgentCore Runtime superseded. Lex code-hook Lambda handles dialog logic. | [ADR-0018](decisions/0018-lex-orchestrates-nova-sonic-and-agentcore.md) |
-| 2026-05-23 | **CDK TypeScript for all infra** | One IaC language across the stack. | [ADR-0005](decisions/0005-cdk-typescript-for-infra.md) |
-| 2026-05-24 | **Lex bot orchestrates; code-hook Lambda bridges to AgentCore Gateway** | Primary-source verified: no `connect:CreateAIAgent`, no `InvokeAIAgent` flow action. Lex + Lambda code-hook is the correct path. | [ADR-0018](decisions/0018-lex-orchestrates-nova-sonic-and-agentcore.md) |
+| Decision | Why | Where to read more |
+|---|---|---|
+| **Not Amazon Connect Health prebuilt agents** | Public AWS docs hard-wire the Patient Verification agent to Epic FHIR APIs; no public knob for non-Epic FHIR servers. | — |
+| **Lex V2 with Nova 2 Sonic** | The "Connect native AI agent" doesn't exist for voice. Lex + Nova Sonic is the actual voice surface. | — |
+| **Amazon Nova 2 Sonic for speech-to-speech** | Configured on Lex bot locale via `UnifiedSpeechSettings`. Nova Sonic v1 is legacy (EOL Sep 2026); using v2. | — |
+| **SMART-on-FHIR Provider App (authorization_code + PKCE, user scopes)** | Practices grant access once via clinician sign-in; validated that user-scope refresh tokens work for unattended reads. | [ADR-0003](decisions/0003-smart-provider-app-not-backend-services.md) |
+| **Lambda code-hook for dialog** | Lex code-hook Lambda handles dialog logic; LLM (Claude via Bedrock) runs every turn. | [ADR-0019](decisions/0019-llm-powered-code-hook.md) |
+| **CDK TypeScript for all infra** | One IaC language across the stack. | [ADR-0005](decisions/0005-cdk-typescript-for-infra.md) |
 
 ## Scope of v1 (the pilot)
 
@@ -41,11 +40,11 @@ Automating verification specifically (not the whole call) gives the biggest near
 - Outbound calls (reminders, recall campaigns)
 - Multi-region resilience (us-east-1 only in v1)
 
-## Working assumptions to validate in Session 2
+## Working assumptions
 
-- Practice Fusion's FHIR R4 endpoint accepts `Patient?telecom=&birthdate=` and returns at most one match for a uniquely-identified test patient. (Public CapabilityStatement excerpt suggests yes; live `metadata` will confirm.)
-- Veradigm allows user-scope tokens to be used for unattended (phone-time) reads, i.e., the agent operating on the authorizing clinician's behalf is acceptable. If not, we pivot to SMART Backend Services (system scopes) — a clean ADR change.
-- AWS BAA covers account `086514900943` (verified via AWS Artifact before any PHI flows).
+- The target EHR's FHIR R4 endpoint accepts `Patient?telecom=&birthdate=` and returns at most one match for a uniquely-identified patient.
+- User-scope tokens can be used for unattended (phone-time) reads, i.e., the agent operating on the authorizing clinician's behalf is acceptable. If not, pivot to SMART Backend Services (system scopes).
+- AWS BAA covers your account (verify via AWS Artifact before any PHI flows).
 
 ## Why this matters
 

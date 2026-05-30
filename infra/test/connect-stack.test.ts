@@ -16,9 +16,9 @@ function buildStack(): cdk.Stack {
     envConfig: envs.qa,
     phoneRoutingTable: phoneRouting.table,
     lexBotAliasArn:
-      "arn:aws:lex:us-east-1:086514900943:bot-alias/TESTBOT/TESTALIAS",
+      "arn:aws:lex:us-east-1:000000000000:bot-alias/TESTBOT/TESTALIAS",
     escalationQueueArn:
-      "arn:aws:connect:us-east-1:086514900943:instance/INST/queue/QUEUE",
+      "arn:aws:connect:us-east-1:000000000000:instance/INST/queue/QUEUE",
   });
 }
 
